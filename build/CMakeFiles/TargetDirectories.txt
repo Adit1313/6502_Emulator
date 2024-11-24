@@ -1,0 +1,6 @@
+/home/akirtani/workspace/emu6502/build/CMakeFiles/tLDA.dir
+/home/akirtani/workspace/emu6502/build/CMakeFiles/tLDX.dir
+/home/akirtani/workspace/emu6502/build/CMakeFiles/tLDY.dir
+/home/akirtani/workspace/emu6502/build/CMakeFiles/tSTA.dir
+/home/akirtani/workspace/emu6502/build/CMakeFiles/edit_cache.dir
+/home/akirtani/workspace/emu6502/build/CMakeFiles/rebuild_cache.dir
