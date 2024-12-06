@@ -1,1 +1,0 @@
-/usr/bin/g++ -Wl,--dependency-file,CMakeFiles/tSTA.dir/link.d CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.o CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.o CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.o CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.o CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.o -o tSTA
