@@ -88,11 +88,13 @@ class tSTA_Absolute: public BaseTest
 {
     public:
     BYTE data;
+    WORD address;
 
-    tSTA_Absolute(BYTE dataReq, u32 cycleNum)
+    tSTA_Absolute(BYTE dataReq, WORD absAddress, u32 cycleNum)
     {
         data = dataReq;
         expectedCycles = cycleNum;
+        address = absAddress;
     }
 
     virtual void ExecuteTest()
@@ -101,267 +103,114 @@ class tSTA_Absolute: public BaseTest
         memory[PC_INIT+1] = 0xFC;
         memory[PC_INIT+2] = 0xFF;
         memory[0xFFFC] = data;
+        memory[PC_INIT+3] = IntSet::STA_ABSOLUTE;
+        memory[PC_INIT+4] = (BYTE) (address & 0xFF);
+        memory[PC_INIT+5] = (BYTE) (address>>8 & 0xFF);
 
         // Begin program execution
-        Execute(&cpu, &memory, (u32) 1); // Execute n instructions
+        Execute(&cpu, &memory, (u32) 2); // Execute n instructions
     }
 
     virtual void ValidateOutput()
     {
         error = false;
-        if (cpu.A != data)
+        if (memory[address] != data)
         {
-            std::cerr << "Incorrect data in Accumulator" << std::endl;
+            std::cerr << "Incorrect data in memory" << std::endl;
             error = true;
         }
 
-        if (data==0)
-        {
-            if (cpu.Z != 1)
-            {
-                std::cerr << "Incorrect value of Z flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (data &0b10000000 > 0)
-        {
-            if (cpu.N != 1)
-            {
-                std::cerr << "Incorrect value of N flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (cycles != expectedCycles)
+        if (cycles - 4 != expectedCycles)
         {
             std::cerr << "Incorrect number of cycles used" << std::endl;
             error = true;
         }
     }
 };
-class tLDA_AbsoluteAddX: public BaseTest
+class tSTA_AbsoluteAddX: public BaseTest
 {
     public:
     BYTE data;
-
-    tLDA_AbsoluteAddX(BYTE dataReq, u32 cycleNum)
+    WORD address;
+    
+    tSTA_AbsoluteAddX(BYTE dataReq, WORD absAddress, u32 cycleNum)
     {
         data = dataReq;
         expectedCycles = cycleNum;
+        address = absAddress;
     }
 
     virtual void ExecuteTest()
     {
-        memory[PC_INIT] = IntSet::LDA_ABSOLUTEADDX;
-        memory[PC_INIT+1] = 0x02;
-        memory[PC_INIT+2] = 0x44;
-        memory[0x4403] = data;
-        cpu.X = 0x1;
+        memory[PC_INIT] = IntSet::LDA_ABSOLUTE;
+        memory[PC_INIT+1] = 0xFC;
+        memory[PC_INIT+2] = 0xFF;
+        memory[0xFFFC] = data;
+        memory[PC_INIT+3] = IntSet::LDX_IMMEDIATE;
+        memory[PC_INIT+4] = 0x2;
+        memory[PC_INIT+5] = IntSet::STA_ABSOLUTEADDX;
+        memory[PC_INIT+6] = (BYTE) (address & 0xFF);
+        memory[PC_INIT+7] = (BYTE) (address>>8 & 0xFF);
 
         // Begin program execution
-        Execute(&cpu, &memory, (u32) 1); // Execute n instructions
+        Execute(&cpu, &memory, (u32) 3); // Execute n instructions
     }
 
     virtual void ValidateOutput()
     {
         error = false;
-        if (cpu.A != data)
+        if (memory[address+0x2] != data)
         {
-            std::cerr << "Incorrect data in Accumulator" << std::endl;
+            std::cerr << "Incorrect data in memory" << std::endl;
             error = true;
         }
 
-        if (data==0)
-        {
-            if (cpu.Z != 1)
-            {
-                std::cerr << "Incorrect value of Z flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (data &0b10000000 > 0)
-        {
-            if (cpu.N != 1)
-            {
-                std::cerr << "Incorrect value of N flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (cycles != expectedCycles)
+        if (cycles - (4+2) != expectedCycles)
         {
             std::cerr << "Incorrect number of cycles used" << std::endl;
             error = true;
         }
     }
 };
-class tLDA_AbsoluteAddXWithPageCrossing: public BaseTest
+class tSTA_AbsoluteAddY: public BaseTest
 {
     public:
     BYTE data;
-
-    tLDA_AbsoluteAddXWithPageCrossing(BYTE dataReq, u32 cycleNum)
+    WORD address;
+    
+    tSTA_AbsoluteAddY(BYTE dataReq, WORD absAddress, u32 cycleNum)
     {
         data = dataReq;
         expectedCycles = cycleNum;
+        address = absAddress;
     }
 
     virtual void ExecuteTest()
     {
-        memory[PC_INIT] = IntSet::LDA_ABSOLUTEADDX;
-        memory[PC_INIT+1] = 0x02;
-        memory[PC_INIT+2] = 0x44;
-        memory[0x4501] = data;
-        cpu.X = 0xFF;
+        memory[PC_INIT] = IntSet::LDA_ABSOLUTE;
+        memory[PC_INIT+1] = 0xFC;
+        memory[PC_INIT+2] = 0xFF;
+        memory[0xFFFC] = data;
+        memory[PC_INIT+3] = IntSet::LDY_IMMEDIATE;
+        memory[PC_INIT+4] = 0x2;
+        memory[PC_INIT+5] = IntSet::STA_ABSOLUTEADDY;
+        memory[PC_INIT+6] = (BYTE) (address & 0xFF);
+        memory[PC_INIT+7] = (BYTE) (address>>8 & 0xFF);
 
         // Begin program execution
-        Execute(&cpu, &memory, (u32) 1); // Execute n instructions
+        Execute(&cpu, &memory, (u32) 3); // Execute n instructions
     }
 
     virtual void ValidateOutput()
     {
         error = false;
-        if (cpu.A != data)
+        if (memory[address+0x2] != data)
         {
-            std::cerr << "Incorrect data in Accumulator" << std::endl;
+            std::cerr << "Incorrect data in memory" << std::endl;
             error = true;
         }
 
-        if (data==0)
-        {
-            if (cpu.Z != 1)
-            {
-                std::cerr << "Incorrect value of Z flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (data &0b10000000 > 0)
-        {
-            if (cpu.N != 1)
-            {
-                std::cerr << "Incorrect value of N flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (cycles != expectedCycles)
-        {
-            std::cerr << "Incorrect number of cycles used" << std::endl;
-            error = true;
-        }
-    }
-};
-class tLDA_AbsoluteAddY: public BaseTest
-{
-    public:
-    BYTE data;
-
-    tLDA_AbsoluteAddY(BYTE dataReq, u32 cycleNum)
-    {
-        data = dataReq;
-        expectedCycles = cycleNum;
-    }
-
-    virtual void ExecuteTest()
-    {
-        memory[PC_INIT] = IntSet::LDA_ABSOLUTEADDY;
-        memory[PC_INIT+1] = 0x02;
-        memory[PC_INIT+2] = 0x44;
-        memory[0x4403] = data;
-        cpu.Y = 0x1;
-
-        // Begin program execution
-        Execute(&cpu, &memory, (u32) 1); // Execute n instructions
-    }
-
-    virtual void ValidateOutput()
-    {
-        error = false;
-        if (cpu.A != data)
-        {
-            std::cerr << "Incorrect data in Accumulator" << std::endl;
-            error = true;
-        }
-
-        if (data==0)
-        {
-            if (cpu.Z != 1)
-            {
-                std::cerr << "Incorrect value of Z flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (data &0b10000000 > 0)
-        {
-            if (cpu.N != 1)
-            {
-                std::cerr << "Incorrect value of N flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (cycles != expectedCycles)
-        {
-            std::cerr << "Incorrect number of cycles used" << std::endl;
-            error = true;
-        }
-    }
-};
-class tLDA_AbsoluteAddYWithPageCrossing: public BaseTest
-{
-    public:
-    BYTE data;
-
-    tLDA_AbsoluteAddYWithPageCrossing(BYTE dataReq, u32 cycleNum)
-    {
-        data = dataReq;
-        expectedCycles = cycleNum;
-    }
-
-    virtual void ExecuteTest()
-    {
-        memory[PC_INIT] = IntSet::LDA_ABSOLUTEADDY;
-        memory[PC_INIT+1] = 0x02;
-        memory[PC_INIT+2] = 0x44;
-        memory[0x4501] = data;
-        cpu.Y = 0xFF;
-
-        // Begin program execution
-        Execute(&cpu, &memory, (u32) 1); // Execute n instructions
-    }
-
-    virtual void ValidateOutput()
-    {
-        error = false;
-        if (cpu.A != data)
-        {
-            std::cerr << "Incorrect data in Accumulator" << std::endl;
-            error = true;
-        }
-
-        if (data==0)
-        {
-            if (cpu.Z != 1)
-            {
-                std::cerr << "Incorrect value of Z flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (data &0b10000000 > 0)
-        {
-            if (cpu.N != 1)
-            {
-                std::cerr << "Incorrect value of N flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (cycles != expectedCycles)
+        if (cycles - (4+2) != expectedCycles)
         {
             std::cerr << "Incorrect number of cycles used" << std::endl;
             error = true;
@@ -569,37 +418,29 @@ int main(void)
         testObj.ValidateOutput();
     }
 
-    // {
-    //     message = "Running testpoint: tLDA_Absolute to verify LDA with absolute addressing mode";
-    //     printTestAnnouncement(message);
-    //     tLDA_Absolute testObj((BYTE) 0x29, (u32) 4);
-    //     testObj.ExecuteTest();
-    //     testObj.ValidateOutput();
-    // }
+    {
+        message = "Running testpoint: tSTA_Absolute to verify STA with absolute addressing mode";
+        printTestAnnouncement(message);
+        tSTA_Absolute testObj((BYTE) 0x29, (WORD) 0xFFD0,  (u32) 4);
+        testObj.ExecuteTest();
+        testObj.ValidateOutput();
+    }
 
-    // {
-    //     message = "Running testpoint: tLDA_AbsoluteAddX to verify LDA with absolute addressing X mode";
-    //     printTestAnnouncement(message);
-    //     tLDA_AbsoluteAddX testObj((BYTE) 0x29, (u32) 4);
-    //     testObj.ExecuteTest();
-    //     testObj.ValidateOutput();
-    // }
+    {
+        message = "Running testpoint: tSTA_AbsoluteAddX to verify STA with absolute addressing X mode";
+        printTestAnnouncement(message);
+        tSTA_AbsoluteAddX testObj((BYTE) 0x29, (WORD) 0xFFD0, (u32) 5);
+        testObj.ExecuteTest();
+        testObj.ValidateOutput();
+    }
 
-    // {
-    //     message = "Running testpoint: tLDA_AbsoluteAddXWithPageCrossing to verify cycle count for LDA with absolute addressing X mode with page crossing";
-    //     printTestAnnouncement(message);
-    //     tLDA_AbsoluteAddXWithPageCrossing testObj((BYTE) 0x29, (u32) 5);
-    //     testObj.ExecuteTest();
-    //     testObj.ValidateOutput();
-    // }
-
-    // {
-    //     message = "Running testpoint: tLDA_AbsoluteAddY to verify LDA with absolute addressing Y mode";
-    //     printTestAnnouncement(message);
-    //     tLDA_AbsoluteAddY testObj((BYTE) 0x29, (u32) 4);
-    //     testObj.ExecuteTest();
-    //     testObj.ValidateOutput();
-    // }
+    {
+        message = "Running testpoint: tSTA_AbsoluteAddY to verify STA with absolute addressing Y mode";
+        printTestAnnouncement(message);
+        tSTA_AbsoluteAddY testObj((BYTE) 0x29, (WORD) 0xFFD0, (u32) 5);
+        testObj.ExecuteTest();
+        testObj.ValidateOutput();
+    }
 
     // {
     //     message = "Running testpoint: tLDA_AbsoluteAddYWithPageCrossing to verify cycle count for LDA with absolute addressing Y mode with page crossing";

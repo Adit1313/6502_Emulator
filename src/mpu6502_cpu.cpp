@@ -21,14 +21,6 @@ OperandValue fetchZeroPage(CPU *cpu, Mem *mem, OperandType* opType)
     return value;
 }
 
-OperandValue fetchZeroPageAddress(CPU *cpu, Mem *mem, OperandType* opType)
-{
-    *opType = BYTE_OPERAND;
-    OperandValue value = {0};
-    value.byte = FetchByte(cpu, mem);
-    return value;
-}
-
 OperandValue fetchZeroPageAddX(CPU *cpu, Mem *mem, OperandType* opType)
 {
     *opType = BYTE_OPERAND;
@@ -39,26 +31,6 @@ OperandValue fetchZeroPageAddX(CPU *cpu, Mem *mem, OperandType* opType)
     cycles += 1;        // Requires an extra cycle
 
     value.byte = ReadByte(mem, zpAddr);
-    return value;
-}
-
-OperandValue fetchZeroPageAddXAddress(CPU *cpu, Mem *mem, OperandType* opType)
-{
-    *opType = BYTE_OPERAND;
-    OperandValue value = {0};
-    value.byte = FetchByte(cpu, mem);
-    
-    value.byte += cpu->X;   // Add the value of X to the address
-    cycles += 1;        // Requires an extra cycle
-
-    return value;
-}
-
-OperandValue fetchAbsoluteAddress(CPU *cpu, Mem *mem, OperandType* opType)
-{
-    *opType = WORD_OPERAND;
-    OperandValue value = {0};
-    value.word = FetchWord(cpu, mem);
     return value;
 }
 
@@ -133,6 +105,86 @@ OperandValue fetchIndirectAddY(CPU *cpu, Mem *mem, OperandType* opType)
     return value;
 }
 
+OperandValue fetchZeroPageAddress(CPU *cpu, Mem *mem, OperandType* opType)
+{
+    *opType = BYTE_OPERAND;
+    OperandValue value = {0};
+    value.byte = FetchByte(cpu, mem);
+    return value;
+}
+
+OperandValue fetchZeroPageAddXAddress(CPU *cpu, Mem *mem, OperandType* opType)
+{
+    *opType = BYTE_OPERAND;
+    OperandValue value = {0};
+    value.byte = FetchByte(cpu, mem);
+    
+    value.byte += cpu->X;   // Add the value of X to the address
+    cycles += 1;        // Requires an extra cycle
+
+    return value;
+}
+
+OperandValue fetchAbsoluteAddress(CPU *cpu, Mem *mem, OperandType* opType)
+{
+    *opType = WORD_OPERAND;
+    OperandValue value = {0};
+    value.word = FetchWord(cpu, mem);
+    return value;
+}
+
+OperandValue fetchAbsoluteAddXAddress(CPU *cpu, Mem *mem, OperandType* opType)
+{
+    *opType = WORD_OPERAND;
+    OperandValue value = {0};
+    value.word = FetchWord(cpu, mem);
+
+    value.word += cpu->X;
+    cycles += 1;
+
+    return value;
+}
+
+OperandValue fetchAbsoluteAddYAddress(CPU *cpu, Mem *mem, OperandType* opType)
+{
+    *opType = WORD_OPERAND;
+    OperandValue value = {0};
+    value.word = FetchWord(cpu, mem);
+
+    value.word += cpu->Y;
+    cycles += 1;
+
+    return value;
+}
+
+
+OperandValue fetchIndirectAddXAddress(CPU *cpu, Mem *mem, OperandType* opType)
+{
+    *opType = BYTE_OPERAND;
+    OperandValue value = {0};
+    value.byte = FetchByte(cpu, mem);
+    value.byte += cpu->X;
+    return value;
+}
+
+OperandValue fetchIndirectAddYAddress(CPU *cpu, Mem *mem, OperandType* opType)
+{
+    *opType = BYTE_OPERAND;
+    OperandValue value = {0};
+
+    BYTE zeroPageAddress = FetchByte(cpu, mem);
+    WORD byteVector = ReadWord(mem, zeroPageAddress);
+
+    if ((byteVector + cpu->Y) >> 8 != (byteVector >> 8)) // Detect a page crossing
+    {
+        cycles += 1;
+    }
+
+    byteVector += cpu->Y;
+    value.byte = byteVector;
+    return value;
+}
+
 // Functions for different instructions
 void LDA(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
 {
@@ -157,7 +209,14 @@ void LDY(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
 
 void STA(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
 {
-    WriteByte(cpu, mem, opVal.byte, cpu->A);
+    if (opType == BYTE_OPERAND)
+    {
+        WriteByte(cpu, mem, opVal.byte, cpu->A);
+    }
+    else 
+    {
+        WriteByte(cpu, mem, opVal.word, cpu->A);
+    }
 }
 
 void JSR(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
@@ -202,11 +261,11 @@ void InitOpcodeTable()
 
     opcodeTable[IntSet::STA_ZEROPAGE] = (OpcodeEntry){fetchZeroPageAddress, STA};
     opcodeTable[IntSet::STA_ZEROPAGEADDX] = (OpcodeEntry){fetchZeroPageAddXAddress, STA};
-    opcodeTable[IntSet::STA_ABSOLUTE] = (OpcodeEntry){fetchAbsolute, STA};
-    opcodeTable[IntSet::STA_ABSOLUTEADDX] = (OpcodeEntry){fetchAbsoluteAddX, STA};
-    opcodeTable[IntSet::STA_ABSOLUTEADDY] = (OpcodeEntry){fetchAbsoluteAddY, STA};
+    opcodeTable[IntSet::STA_ABSOLUTE] = (OpcodeEntry){fetchAbsoluteAddress, STA};
+    opcodeTable[IntSet::STA_ABSOLUTEADDX] = (OpcodeEntry){fetchAbsoluteAddXAddress, STA};
+    opcodeTable[IntSet::STA_ABSOLUTEADDY] = (OpcodeEntry){fetchAbsoluteAddYAddress, STA};
     opcodeTable[IntSet::STA_INDIRECTX] = (OpcodeEntry){fetchIndirectAddX, STA};
-    opcodeTable[IntSet::STA_INDIRECTY] = (OpcodeEntry){fetchIndirectAddY, STA};
+    opcodeTable[IntSet::STA_INDIRECTY] = (OpcodeEntry){fetchIndirectAddYAddress, STA};
 
     opcodeTable[IntSet::JSR_ABSOLUTE] = (OpcodeEntry){fetchAbsoluteAddress, JSR};
     opcodeTable[IntSet::INVALID] = (OpcodeEntry){fetchImmediate, NULL_CMD};

@@ -76,12 +76,6 @@ OperandValue fetchZeroPage(CPU *cpu, Mem *mem, OperandType* opType);
 
 OperandValue fetchZeroPageAddX(CPU *cpu, Mem *mem, OperandType* opType);
 
-OperandValue fetchZeroPageAddress(CPU *cpu, Mem *mem, OperandType* opType);
-
-OperandValue fetchZeroPageAddXAddress(CPU *cpu, Mem *mem, OperandType* opType);
-
-OperandValue fetchAbsoluteAddress(CPU *cpu, Mem *mem, OperandType* opType);
-
 OperandValue fetchAbsolute(CPU *cpu, Mem *mem, OperandType* opType);
 
 OperandValue fetchAbsoluteAddX(CPU *cpu, Mem *mem, OperandType* opType);
@@ -91,6 +85,17 @@ OperandValue fetchAbsoluteAddY(CPU *cpu, Mem *mem, OperandType* opType);
 OperandValue fetchIndirectAddX(CPU *cpu, Mem *mem, OperandType* opType);
 
 OperandValue fetchIndirectAddY(CPU *cpu, Mem *mem, OperandType* opType);
+
+// Addressing mode functions which return the address directly
+OperandValue fetchZeroPageAddress(CPU *cpu, Mem *mem, OperandType* opType);
+
+OperandValue fetchZeroPageAddXAddress(CPU *cpu, Mem *mem, OperandType* opType);
+
+OperandValue fetchAbsoluteAddress(CPU *cpu, Mem *mem, OperandType* opType);
+
+OperandValue fetchAbsoluteAddXAddress(CPU *cpu, Mem *mem, OperandType* opType);
+
+OperandValue fetchAbsoluteAddYAddress(CPU *cpu, Mem *mem, OperandType* opType);
 
 // Functions for different instructions
 void LDA(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
