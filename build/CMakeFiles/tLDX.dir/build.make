@@ -76,71 +76,71 @@ CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.o: CMakeFiles/tLDX.dir/flags.make
 CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.o: /home/akirtani/workspace/emu6502/tests/LDX/tLDX.cpp
 CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.o: CMakeFiles/tLDX.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akirtani/workspace/emu6502/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.o -MF CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.o.d -o CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.o -c /home/akirtani/workspace/emu6502/tests/LDX/tLDX.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.o -MF CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.o.d -o CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.o -c /home/akirtani/workspace/emu6502/tests/LDX/tLDX.cpp
 
 CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/tests/LDX/tLDX.cpp > CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/tests/LDX/tLDX.cpp > CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.i
 
 CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/tests/LDX/tLDX.cpp -o CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/tests/LDX/tLDX.cpp -o CMakeFiles/tLDX.dir/tests/LDX/tLDX.cpp.s
 
 CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.o: CMakeFiles/tLDX.dir/flags.make
 CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.o: /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp
 CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.o: CMakeFiles/tLDX.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akirtani/workspace/emu6502/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.o -MF CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.o.d -o CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.o -MF CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.o.d -o CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp
 
 CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp > CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp > CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.i
 
 CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp -o CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp -o CMakeFiles/tLDX.dir/src/mpu6502_cpu.cpp.s
 
 CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.o: CMakeFiles/tLDX.dir/flags.make
 CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.o: /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp
 CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.o: CMakeFiles/tLDX.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akirtani/workspace/emu6502/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.o -MF CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.o.d -o CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.o -MF CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.o.d -o CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp
 
 CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp > CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp > CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.i
 
 CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp -o CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp -o CMakeFiles/tLDX.dir/src/mpu6502_interface.cpp.s
 
 CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.o: CMakeFiles/tLDX.dir/flags.make
 CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.o: /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp
 CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.o: CMakeFiles/tLDX.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akirtani/workspace/emu6502/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.o -MF CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.o.d -o CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.o -MF CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.o.d -o CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp
 
 CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp > CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp > CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.i
 
 CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp -o CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp -o CMakeFiles/tLDX.dir/src/mpu6502_memory.cpp.s
 
 CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.o: CMakeFiles/tLDX.dir/flags.make
 CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.o: /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp
 CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.o: CMakeFiles/tLDX.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akirtani/workspace/emu6502/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.o -MF CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.o.d -o CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.o -c /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.o -MF CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.o.d -o CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.o -c /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp
 
 CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp > CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp > CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.i
 
 CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp -o CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp -o CMakeFiles/tLDX.dir/tests/BaseTest/BaseTest.cpp.s
 
 # Object files for target tLDX
 tLDX_OBJECTS = \

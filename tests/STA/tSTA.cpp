@@ -5,7 +5,7 @@ class tSTA_ZeroPage : public BaseTest
     public:
     BYTE data;
 
-    tSTA_ZeroPage(BYTE dataReq, BYTE zpAddress, u32 cycleNum)
+    tSTA_ZeroPage(BYTE dataReq, u32 cycleNum)
     {
         data = dataReq;
         expectedCycles = cycleNum;
@@ -27,9 +27,9 @@ class tSTA_ZeroPage : public BaseTest
     {
         error = false;
 
-        if (memory[0x20] == data)
+        if (memory[data] == data)
         {
-
+            
         }
     }
 };

@@ -76,71 +76,71 @@ CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.o: CMakeFiles/tSTA.dir/flags.make
 CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.o: /home/akirtani/workspace/emu6502/tests/STA/tSTA.cpp
 CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.o: CMakeFiles/tSTA.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akirtani/workspace/emu6502/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.o -MF CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.o.d -o CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.o -c /home/akirtani/workspace/emu6502/tests/STA/tSTA.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.o -MF CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.o.d -o CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.o -c /home/akirtani/workspace/emu6502/tests/STA/tSTA.cpp
 
 CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/tests/STA/tSTA.cpp > CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/tests/STA/tSTA.cpp > CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.i
 
 CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/tests/STA/tSTA.cpp -o CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/tests/STA/tSTA.cpp -o CMakeFiles/tSTA.dir/tests/STA/tSTA.cpp.s
 
 CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.o: CMakeFiles/tSTA.dir/flags.make
 CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.o: /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp
 CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.o: CMakeFiles/tSTA.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akirtani/workspace/emu6502/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.o -MF CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.o.d -o CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.o -MF CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.o.d -o CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp
 
 CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp > CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp > CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.i
 
 CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp -o CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_cpu.cpp -o CMakeFiles/tSTA.dir/src/mpu6502_cpu.cpp.s
 
 CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.o: CMakeFiles/tSTA.dir/flags.make
 CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.o: /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp
 CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.o: CMakeFiles/tSTA.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akirtani/workspace/emu6502/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.o -MF CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.o.d -o CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.o -MF CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.o.d -o CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp
 
 CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp > CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp > CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.i
 
 CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp -o CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_interface.cpp -o CMakeFiles/tSTA.dir/src/mpu6502_interface.cpp.s
 
 CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.o: CMakeFiles/tSTA.dir/flags.make
 CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.o: /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp
 CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.o: CMakeFiles/tSTA.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akirtani/workspace/emu6502/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.o -MF CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.o.d -o CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.o -MF CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.o.d -o CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.o -c /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp
 
 CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp > CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp > CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.i
 
 CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp -o CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/src/mpu6502_memory.cpp -o CMakeFiles/tSTA.dir/src/mpu6502_memory.cpp.s
 
 CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.o: CMakeFiles/tSTA.dir/flags.make
 CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.o: /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp
 CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.o: CMakeFiles/tSTA.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akirtani/workspace/emu6502/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.o -MF CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.o.d -o CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.o -c /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.o -MF CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.o.d -o CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.o -c /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp
 
 CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp > CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp > CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.i
 
 CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp -o CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akirtani/workspace/emu6502/tests/BaseTest/BaseTest.cpp -o CMakeFiles/tSTA.dir/tests/BaseTest/BaseTest.cpp.s
 
 # Object files for target tSTA
 tSTA_OBJECTS = \
