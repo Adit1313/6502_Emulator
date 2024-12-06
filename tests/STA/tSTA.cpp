@@ -19,7 +19,6 @@ class tSTA_ZeroPage : public BaseTest
         memory[PC_INIT+1] = data;
         memory[PC_INIT+2] = IntSet::STA_ZEROPAGE;
         memory[PC_INIT+3] = address;
-        memory[address] = data;
 
         // Begin program execution
         Execute(&cpu, &memory, (u32) 2); // Execute n instructions
@@ -34,58 +33,51 @@ class tSTA_ZeroPage : public BaseTest
             std::cerr << "Incorrect data in memory" << std::endl;
             error = true;
         }
+
+        if (cycles - 2 != expectedCycles)
+        {
+            std::cerr << "Incorrect number of cycles used" << std::endl;
+            error = true;
+        }
     }
 };
 class tSTA_ZeroPageX : public BaseTest
 {
     public:
     BYTE data;
+    BYTE address;
 
-    tSTA_ZeroPageX(BYTE dataReq, u32 cycleNum)
+    tSTA_ZeroPageX(BYTE dataReq, BYTE zpAddress, u32 cycleNum)
     {
         data = dataReq;
         expectedCycles = cycleNum;
+        address = zpAddress;
     }
 
     virtual void ExecuteTest()
     {
-        cpu.X = 0x2;
-        memory[PC_INIT] = IntSet::LDA_ZEROPAGEADDX;
-        memory[PC_INIT+1] = 0x20;
-        memory[0x22] = data;
+        memory[PC_INIT] = IntSet::LDA_IMMEDIATE;
+        memory[PC_INIT+1] = data;
+        memory[PC_INIT+2] = IntSet::LDX_IMMEDIATE;
+        memory[PC_INIT+3] = 0x2;
+        memory[PC_INIT+4] = IntSet::STA_ZEROPAGEADDX;
+        memory[PC_INIT+5] = address;
 
         // Begin program execution
-        Execute(&cpu, &memory, (u32) 1); // Execute n instructions
+        Execute(&cpu, &memory, (u32) 3); // Execute n instructions
     }
 
     virtual void ValidateOutput()
     {
         error = false;
-        if (cpu.A != data)
+        if (memory[address+0x2] != data)
         {
-            std::cerr << "Incorrect data in Accumulator" << std::endl;
+            std::cerr << "Incorrect data in memory" << std::endl;
+            // std::cerr << "Expected data: " << data+48 << " Current data: " << memory[address+0x2] + 48 << std::endl;
             error = true;
         }
 
-        if (data==0)
-        {
-            if (cpu.Z != 1)
-            {
-                std::cerr << "Incorrect value of Z flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (data &0b10000000 > 0)
-        {
-            if (cpu.N != 1)
-            {
-                std::cerr << "Incorrect value of N flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (cycles != expectedCycles)
+        if (cycles - (2 + 2) != expectedCycles)
         {
             std::cerr << "Incorrect number of cycles used" << std::endl;
             error = true;
@@ -569,13 +561,13 @@ int main(void)
         testObj.ValidateOutput();
     }
 
-    // {
-    //     message = "Running testpoint: tLDA_ZeroPageX to verify LDA with zero page X addressing mode";
-    //     printTestAnnouncement(message);
-    //     tLDA_ZeroPageX testObj((BYTE) 0x20, (u32) 4);
-    //     testObj.ExecuteTest();
-    //     testObj.ValidateOutput();
-    // }
+    {
+        message = "Running testpoint: tSTA_ZeroPageX to verify STA with zero page X addressing mode";
+        printTestAnnouncement(message);
+        tSTA_ZeroPageX testObj((BYTE) 0x20, (BYTE) 0x69, (u32) 4);
+        testObj.ExecuteTest();
+        testObj.ValidateOutput();
+    }
 
     // {
     //     message = "Running testpoint: tLDA_Absolute to verify LDA with absolute addressing mode";

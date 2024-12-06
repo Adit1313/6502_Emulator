@@ -21,6 +21,14 @@ OperandValue fetchZeroPage(CPU *cpu, Mem *mem, OperandType* opType)
     return value;
 }
 
+OperandValue fetchZeroPageAddress(CPU *cpu, Mem *mem, OperandType* opType)
+{
+    *opType = BYTE_OPERAND;
+    OperandValue value = {0};
+    value.byte = FetchByte(cpu, mem);
+    return value;
+}
+
 OperandValue fetchZeroPageAddX(CPU *cpu, Mem *mem, OperandType* opType)
 {
     *opType = BYTE_OPERAND;
@@ -31,6 +39,18 @@ OperandValue fetchZeroPageAddX(CPU *cpu, Mem *mem, OperandType* opType)
     cycles += 1;        // Requires an extra cycle
 
     value.byte = ReadByte(mem, zpAddr);
+    return value;
+}
+
+OperandValue fetchZeroPageAddXAddress(CPU *cpu, Mem *mem, OperandType* opType)
+{
+    *opType = BYTE_OPERAND;
+    OperandValue value = {0};
+    value.byte = FetchByte(cpu, mem);
+    
+    value.byte += cpu->X;   // Add the value of X to the address
+    cycles += 1;        // Requires an extra cycle
+
     return value;
 }
 
@@ -180,8 +200,8 @@ void InitOpcodeTable()
     opcodeTable[IntSet::LDY_ABSOLUTE] = (OpcodeEntry){fetchAbsolute, LDY};
     opcodeTable[IntSet::LDY_ABSOLUTEADDX] = (OpcodeEntry){fetchAbsoluteAddY, LDY};
 
-    opcodeTable[IntSet::STA_ZEROPAGE] = (OpcodeEntry){fetchZeroPage, STA};
-    opcodeTable[IntSet::STA_ZEROPAGEADDX] = (OpcodeEntry){fetchZeroPageAddX, STA};
+    opcodeTable[IntSet::STA_ZEROPAGE] = (OpcodeEntry){fetchZeroPageAddress, STA};
+    opcodeTable[IntSet::STA_ZEROPAGEADDX] = (OpcodeEntry){fetchZeroPageAddXAddress, STA};
     opcodeTable[IntSet::STA_ABSOLUTE] = (OpcodeEntry){fetchAbsolute, STA};
     opcodeTable[IntSet::STA_ABSOLUTEADDX] = (OpcodeEntry){fetchAbsoluteAddX, STA};
     opcodeTable[IntSet::STA_ABSOLUTEADDY] = (OpcodeEntry){fetchAbsoluteAddY, STA};

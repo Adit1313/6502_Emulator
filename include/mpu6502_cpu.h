@@ -76,6 +76,10 @@ OperandValue fetchZeroPage(CPU *cpu, Mem *mem, OperandType* opType);
 
 OperandValue fetchZeroPageAddX(CPU *cpu, Mem *mem, OperandType* opType);
 
+OperandValue fetchZeroPageAddress(CPU *cpu, Mem *mem, OperandType* opType);
+
+OperandValue fetchZeroPageAddXAddress(CPU *cpu, Mem *mem, OperandType* opType);
+
 OperandValue fetchAbsoluteForJSR(CPU *cpu, Mem *mem, OperandType* opType);
 
 OperandValue fetchAbsolute(CPU *cpu, Mem *mem, OperandType* opType);

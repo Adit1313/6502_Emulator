@@ -8,7 +8,7 @@
             "name": "Debug built exe",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/debug/lda_tests",
+            "program": "${workspaceFolder}/debug/tSTA",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
