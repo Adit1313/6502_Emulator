@@ -4,11 +4,13 @@ class tSTA_ZeroPage : public BaseTest
 {
     public:
     BYTE data;
+    BYTE address;
 
-    tSTA_ZeroPage(BYTE dataReq, u32 cycleNum)
+    tSTA_ZeroPage(BYTE dataReq, BYTE zpAddress, u32 cycleNum)
     {
         data = dataReq;
         expectedCycles = cycleNum;
+        address = zpAddress;
     }
 
     virtual void ExecuteTest()
@@ -16,29 +18,30 @@ class tSTA_ZeroPage : public BaseTest
         memory[PC_INIT] = IntSet::LDA_IMMEDIATE;
         memory[PC_INIT+1] = data;
         memory[PC_INIT+2] = IntSet::STA_ZEROPAGE;
-        memory[PC_INIT+3] = data;
-        memory[0x20] = 0x00;
+        memory[PC_INIT+3] = address;
+        memory[address] = data;
 
         // Begin program execution
-        Execute(&cpu, &memory, (u32) 1); // Execute n instructions
+        Execute(&cpu, &memory, (u32) 2); // Execute n instructions
     }
 
     virtual void ValidateOutput()
     {
         error = false;
 
-        if (memory[data] == data)
+        if (memory[address] != data)
         {
-            
+            std::cerr << "Incorrect data in memory" << std::endl;
+            error = true;
         }
     }
 };
-class tLDA_ZeroPageX : public BaseTest
+class tSTA_ZeroPageX : public BaseTest
 {
     public:
     BYTE data;
 
-    tLDA_ZeroPageX(BYTE dataReq, u32 cycleNum)
+    tSTA_ZeroPageX(BYTE dataReq, u32 cycleNum)
     {
         data = dataReq;
         expectedCycles = cycleNum;
@@ -559,9 +562,9 @@ int main(void)
     std::string message = "";
 
     {
-        message = "Running testpoint: tLDA_ZeroPage to verify LDA with zero page addressing mode";
+        message = "Running testpoint: tSTA_ZeroPage to verify STA with zero page addressing mode";
         printTestAnnouncement(message);
-        tSTA_ZeroPage testObj((BYTE) 0x20, (u32)3);
+        tSTA_ZeroPage testObj((BYTE) 0x20, (BYTE) 0x69, (u32)3);
         testObj.ExecuteTest();
         testObj.ValidateOutput();
     }
