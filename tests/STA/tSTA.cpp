@@ -84,12 +84,12 @@ class tSTA_ZeroPageX : public BaseTest
         }
     }
 };
-class tLDA_Absolute: public BaseTest
+class tSTA_Absolute: public BaseTest
 {
     public:
     BYTE data;
 
-    tLDA_Absolute(BYTE dataReq, u32 cycleNum)
+    tSTA_Absolute(BYTE dataReq, u32 cycleNum)
     {
         data = dataReq;
         expectedCycles = cycleNum;

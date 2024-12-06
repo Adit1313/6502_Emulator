@@ -54,7 +54,7 @@ OperandValue fetchZeroPageAddXAddress(CPU *cpu, Mem *mem, OperandType* opType)
     return value;
 }
 
-OperandValue fetchAbsoluteForJSR(CPU *cpu, Mem *mem, OperandType* opType)
+OperandValue fetchAbsoluteAddress(CPU *cpu, Mem *mem, OperandType* opType)
 {
     *opType = WORD_OPERAND;
     OperandValue value = {0};
@@ -208,6 +208,6 @@ void InitOpcodeTable()
     opcodeTable[IntSet::STA_INDIRECTX] = (OpcodeEntry){fetchIndirectAddX, STA};
     opcodeTable[IntSet::STA_INDIRECTY] = (OpcodeEntry){fetchIndirectAddY, STA};
 
-    opcodeTable[IntSet::JSR_ABSOLUTE] = (OpcodeEntry){fetchAbsoluteForJSR, JSR};
+    opcodeTable[IntSet::JSR_ABSOLUTE] = (OpcodeEntry){fetchAbsoluteAddress, JSR};
     opcodeTable[IntSet::INVALID] = (OpcodeEntry){fetchImmediate, NULL_CMD};
 }
