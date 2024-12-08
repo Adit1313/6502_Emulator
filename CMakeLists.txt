@@ -30,27 +30,14 @@ target_include_directories(tStoreAXYTests
     ${PROJECT_SOURCE_DIR}/tests/BaseTest
 )
 
-set(STX_TESTS tests/STX/tSTX.cpp)
+set(JC_TESTS tests/JumpTests/tJumpTests.cpp)
 set(BASE_TEST tests/BaseTest/BaseTest.cpp)
 file(GLOB MPU_SRC "src/*.cpp")
-list(APPEND STX_TESTS ${MPU_SRC})
-list(APPEND STX_TESTS ${BASE_TEST})
+list(APPEND JC_TESTS ${MPU_SRC})
+list(APPEND JC_TESTS ${BASE_TEST})
 
-add_executable(tSTX ${STX_TESTS})
-target_include_directories(tSTX
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_SOURCE_DIR}/tests/BaseTest
-)
-
-set(STY_TESTS tests/STY/tSTY.cpp)
-set(BASE_TEST tests/BaseTest/BaseTest.cpp)
-file(GLOB MPU_SRC "src/*.cpp")
-list(APPEND STY_TESTS ${MPU_SRC})
-list(APPEND STY_TESTS ${BASE_TEST})
-
-add_executable(tSTY ${STY_TESTS})
-target_include_directories(tSTY
+add_executable(tJumpTests ${JC_TESTS})
+target_include_directories(tJumpTests
     PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/tests/BaseTest
