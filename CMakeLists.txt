@@ -4,53 +4,27 @@ project(mpu6502_emulator_tests)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(LDA_TESTS tests/LDA/tLDA.cpp)
+set(LD_TESTS tests/LoadTests/tLoadAXYTests.cpp)
 set(BASE_TEST tests/BaseTest/BaseTest.cpp)
 file(GLOB MPU_SRC "src/*.cpp")
-list(APPEND LDA_TESTS ${MPU_SRC})
-list(APPEND LDA_TESTS ${BASE_TEST})
+list(APPEND LD_TESTS ${MPU_SRC})
+list(APPEND LD_TESTS ${BASE_TEST})
 
-add_executable(tLDA ${LDA_TESTS})
-target_include_directories(tLDA
+add_executable(tLoadTests ${LD_TESTS})
+target_include_directories(tLoadTests
     PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/tests/BaseTest
 )
 
-set(LDX_TESTS tests/LDX/tLDX.cpp)
+set(ST_TESTS tests/StoreTests/tStoreAXYTests.cpp)
 set(BASE_TEST tests/BaseTest/BaseTest.cpp)
 file(GLOB MPU_SRC "src/*.cpp")
-list(APPEND LDX_TESTS ${MPU_SRC})
-list(APPEND LDX_TESTS ${BASE_TEST})
+list(APPEND ST_TESTS ${MPU_SRC})
+list(APPEND ST_TESTS ${BASE_TEST})
 
-add_executable(tLDX ${LDX_TESTS})
-target_include_directories(tLDX
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_SOURCE_DIR}/tests/BaseTest
-)
-
-set(LDY_TESTS tests/LDY/tLDY.cpp)
-set(BASE_TEST tests/BaseTest/BaseTest.cpp)
-file(GLOB MPU_SRC "src/*.cpp")
-list(APPEND LDY_TESTS ${MPU_SRC})
-list(APPEND LDY_TESTS ${BASE_TEST})
-
-add_executable(tLDY ${LDY_TESTS})
-target_include_directories(tLDY
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_SOURCE_DIR}/tests/BaseTest
-)
-
-set(STA_TESTS tests/STA/tSTA.cpp)
-set(BASE_TEST tests/BaseTest/BaseTest.cpp)
-file(GLOB MPU_SRC "src/*.cpp")
-list(APPEND STA_TESTS ${MPU_SRC})
-list(APPEND STA_TESTS ${BASE_TEST})
-
-add_executable(tSTA ${STA_TESTS})
-target_include_directories(tSTA
+add_executable(tStoreAXYTests ${ST_TESTS})
+target_include_directories(tStoreAXYTests
     PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/tests/BaseTest

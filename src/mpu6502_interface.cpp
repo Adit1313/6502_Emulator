@@ -6,7 +6,7 @@ void Reset(CPU *cpu, Mem *memory)
 {
     cpu->A = cpu->X = cpu->Y = 0;
     cpu->PC = PC_INIT;
-    cpu->SP=SP_INIT;
+    cpu->SP = SP_INIT; 
     cpu->C = cpu->Z = cpu->I = cpu->D = cpu->B = cpu->V = cpu->N = 0;
 
     initMemory(memory);
