@@ -19,16 +19,16 @@ using u32 = unsigned int;
 
 struct CPU
 {
-    WORD PC;
-    BYTE SP;
-    BYTE A, X, Y;
-    BYTE C : 1;
-    BYTE Z : 1;
-    BYTE I : 1;
-    BYTE D : 1;
-    BYTE B : 1;
-    BYTE V : 1;
-    BYTE N : 1;
+    WORD PC;        // Program Counter
+    BYTE SP;        // Stack Pointer
+    BYTE A, X, Y;   // Accumulator, Index Register X & Y
+    BYTE C : 1;     // Carry        1 = True
+    BYTE Z : 1;     // Zero         1 = Result 0
+    BYTE I : 1;     // IRQ Disable  1 = Disabled
+    BYTE D : 1;     // Decimal Mode 1 = True
+    BYTE B : 1;     // BRK Command  1 = Break
+    BYTE V : 1;     // Overflow     1 = True
+    BYTE N : 1;     // Negative     1 = Negative
 };
 
 // Defining our memory

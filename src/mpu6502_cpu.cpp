@@ -82,8 +82,8 @@ OperandValue fetchIndirectAddX(CPU *cpu, Mem *mem, OperandType* opType)
     BYTE zeroPageAddress = FetchByte(cpu, mem);
     zeroPageAddress += cpu->X;
     cycles += 1;
-    WORD byteVector = ReadWord(mem, zeroPageAddress);
-    value.byte = ReadByte(mem, byteVector);
+    WORD vector = ReadWord(mem, zeroPageAddress);
+    value.byte = ReadByte(mem, vector);
     return value;
 }
 
@@ -93,33 +93,33 @@ OperandValue fetchIndirectAddY(CPU *cpu, Mem *mem, OperandType* opType)
     OperandValue value = {0};
 
     BYTE zeroPageAddress = FetchByte(cpu, mem);
-    WORD byteVector = ReadWord(mem, zeroPageAddress);
+    WORD vector = ReadWord(mem, zeroPageAddress);
 
-    if ((byteVector + cpu->Y) >> 8 != (byteVector >> 8)) // Detect a page crossing
+    if ((vector + cpu->Y) >> 8 != (vector >> 8)) // Detect a page crossing
     {
         cycles += 1;
     }
 
-    byteVector += cpu->Y;
-    value.byte = ReadByte(mem, byteVector);
+    vector += cpu->Y;
+    value.byte = ReadByte(mem, vector);
     return value;
 }
 
 OperandValue fetchZeroPageAddress(CPU *cpu, Mem *mem, OperandType* opType)
 {
-    *opType = BYTE_OPERAND;
+    *opType = WORD_OPERAND;
     OperandValue value = {0};
-    value.byte = FetchByte(cpu, mem);
+    value.word = FetchByte(cpu, mem);
     return value;
 }
 
 OperandValue fetchZeroPageAddXAddress(CPU *cpu, Mem *mem, OperandType* opType)
 {
-    *opType = BYTE_OPERAND;
+    *opType = WORD_OPERAND;
     OperandValue value = {0};
-    value.byte = FetchByte(cpu, mem);
+    value.word = FetchByte(cpu, mem);
     
-    value.byte += cpu->X;   // Add the value of X to the address
+    value.word += cpu->X;   // Add the value of X to the address
     cycles += 1;        // Requires an extra cycle
 
     return value;
@@ -157,31 +157,28 @@ OperandValue fetchAbsoluteAddYAddress(CPU *cpu, Mem *mem, OperandType* opType)
     return value;
 }
 
-
 OperandValue fetchIndirectAddXAddress(CPU *cpu, Mem *mem, OperandType* opType)
 {
-    *opType = BYTE_OPERAND;
+    *opType = WORD_OPERAND;
     OperandValue value = {0};
-    value.byte = FetchByte(cpu, mem);
-    value.byte += cpu->X;
+    BYTE zeroPageAddress = FetchByte(cpu, mem);
+    zeroPageAddress += cpu->X;
+    cycles += 1;
+    WORD vector = ReadWord(mem, zeroPageAddress);
+    value.word = vector;
     return value;
 }
 
 OperandValue fetchIndirectAddYAddress(CPU *cpu, Mem *mem, OperandType* opType)
 {
-    *opType = BYTE_OPERAND;
+    *opType = WORD_OPERAND;
     OperandValue value = {0};
 
     BYTE zeroPageAddress = FetchByte(cpu, mem);
-    WORD byteVector = ReadWord(mem, zeroPageAddress);
+    WORD vector = ReadWord(mem, zeroPageAddress);
 
-    if ((byteVector + cpu->Y) >> 8 != (byteVector >> 8)) // Detect a page crossing
-    {
-        cycles += 1;
-    }
-
-    byteVector += cpu->Y;
-    value.byte = byteVector;
+    vector += cpu->Y;
+    value.word = vector;
     return value;
 }
 
@@ -209,14 +206,7 @@ void LDY(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
 
 void STA(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
 {
-    if (opType == BYTE_OPERAND)
-    {
-        WriteByte(cpu, mem, opVal.byte, cpu->A);
-    }
-    else 
-    {
-        WriteByte(cpu, mem, opVal.word, cpu->A);
-    }
+    WriteByte(cpu, mem, opVal.word, cpu->A);
 }
 
 void JSR(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
@@ -264,7 +254,7 @@ void InitOpcodeTable()
     opcodeTable[IntSet::STA_ABSOLUTE] = (OpcodeEntry){fetchAbsoluteAddress, STA};
     opcodeTable[IntSet::STA_ABSOLUTEADDX] = (OpcodeEntry){fetchAbsoluteAddXAddress, STA};
     opcodeTable[IntSet::STA_ABSOLUTEADDY] = (OpcodeEntry){fetchAbsoluteAddYAddress, STA};
-    opcodeTable[IntSet::STA_INDIRECTX] = (OpcodeEntry){fetchIndirectAddX, STA};
+    opcodeTable[IntSet::STA_INDIRECTX] = (OpcodeEntry){fetchIndirectAddXAddress, STA};
     opcodeTable[IntSet::STA_INDIRECTY] = (OpcodeEntry){fetchIndirectAddYAddress, STA};
 
     opcodeTable[IntSet::JSR_ABSOLUTE] = (OpcodeEntry){fetchAbsoluteAddress, JSR};
