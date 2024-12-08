@@ -63,6 +63,14 @@ struct IntSet
     static constexpr BYTE STA_ABSOLUTEADDY = 0x99;
     static constexpr BYTE STA_INDIRECTX = 0x81;
     static constexpr BYTE STA_INDIRECTY = 0x91;
+    //STX
+    static constexpr BYTE STX_ZEROPAGE = 0x86;
+    static constexpr BYTE STX_ZEROPAGEADDY = 0x96;
+    static constexpr BYTE STX_ABSOLUTE = 0x8E;
+    //STY
+    static constexpr BYTE STY_ZEROPAGE = 0x84;
+    static constexpr BYTE STY_ZEROPAGEADDX = 0x94;
+    static constexpr BYTE STY_ABSOLUTE = 0x8C;
     // JSR
     static constexpr BYTE JSR_ABSOLUTE = 0x20;
     // Invalid instruction
@@ -91,6 +99,8 @@ OperandValue fetchZeroPageAddress(CPU *cpu, Mem *mem, OperandType* opType);
 
 OperandValue fetchZeroPageAddXAddress(CPU *cpu, Mem *mem, OperandType* opType);
 
+OperandValue fetchZeroPageAddYAddress(CPU *cpu, Mem *mem, OperandType* opType);
+
 OperandValue fetchAbsoluteAddress(CPU *cpu, Mem *mem, OperandType* opType);
 
 OperandValue fetchAbsoluteAddXAddress(CPU *cpu, Mem *mem, OperandType* opType);
@@ -105,6 +115,10 @@ void LDX(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
 void LDY(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
 
 void STA(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
+
+void STX(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
+
+void STY(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
 
 void JSR(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
 

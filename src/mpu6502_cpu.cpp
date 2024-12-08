@@ -125,6 +125,18 @@ OperandValue fetchZeroPageAddXAddress(CPU *cpu, Mem *mem, OperandType* opType)
     return value;
 }
 
+OperandValue fetchZeroPageAddYAddress(CPU *cpu, Mem *mem, OperandType* opType)
+{
+    *opType = WORD_OPERAND;
+    OperandValue value = {0};
+    value.word = FetchByte(cpu, mem);
+    
+    value.word += cpu->Y;   // Add the value of X to the address
+    cycles += 1;        // Requires an extra cycle
+
+    return value;
+}
+
 OperandValue fetchAbsoluteAddress(CPU *cpu, Mem *mem, OperandType* opType)
 {
     *opType = WORD_OPERAND;
@@ -176,8 +188,8 @@ OperandValue fetchIndirectAddYAddress(CPU *cpu, Mem *mem, OperandType* opType)
 
     BYTE zeroPageAddress = FetchByte(cpu, mem);
     WORD vector = ReadWord(mem, zeroPageAddress);
-
     vector += cpu->Y;
+    cycles += 1;
     value.word = vector;
     return value;
 }
@@ -207,6 +219,16 @@ void LDY(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
 void STA(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
 {
     WriteByte(cpu, mem, opVal.word, cpu->A);
+}
+
+void STX(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
+{
+    WriteByte(cpu, mem, opVal.word, cpu->X);
+}
+
+void STY(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
+{
+    WriteByte(cpu, mem, opVal.word, cpu->Y);
 }
 
 void JSR(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
@@ -256,6 +278,14 @@ void InitOpcodeTable()
     opcodeTable[IntSet::STA_ABSOLUTEADDY] = (OpcodeEntry){fetchAbsoluteAddYAddress, STA};
     opcodeTable[IntSet::STA_INDIRECTX] = (OpcodeEntry){fetchIndirectAddXAddress, STA};
     opcodeTable[IntSet::STA_INDIRECTY] = (OpcodeEntry){fetchIndirectAddYAddress, STA};
+
+    opcodeTable[IntSet::STX_ZEROPAGE] = (OpcodeEntry){fetchZeroPageAddress, STX};
+    opcodeTable[IntSet::STX_ZEROPAGEADDY] = (OpcodeEntry){fetchZeroPageAddYAddress, STX};
+    opcodeTable[IntSet::STX_ABSOLUTE] = (OpcodeEntry){fetchAbsoluteAddress, STX};
+
+    opcodeTable[IntSet::STY_ZEROPAGE] = (OpcodeEntry){fetchZeroPageAddress, STY};
+    opcodeTable[IntSet::STY_ZEROPAGEADDX] = (OpcodeEntry){fetchZeroPageAddXAddress, STY};
+    opcodeTable[IntSet::STY_ABSOLUTE] = (OpcodeEntry){fetchAbsoluteAddress, STY};
 
     opcodeTable[IntSet::JSR_ABSOLUTE] = (OpcodeEntry){fetchAbsoluteAddress, JSR};
     opcodeTable[IntSet::INVALID] = (OpcodeEntry){fetchImmediate, NULL_CMD};

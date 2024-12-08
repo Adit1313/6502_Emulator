@@ -261,116 +261,44 @@ class tSTA_IndirectX: public BaseTest
         }
     }
 };
-class tLDA_IndirectY: public BaseTest
+class tSTA_IndirectY: public BaseTest
 {
     public:
     BYTE data;
+    WORD address;
 
-    tLDA_IndirectY(BYTE dataReq, u32 cycleNum)
+    tSTA_IndirectY(BYTE dataReq, WORD dAddress, u32 cycleNum)
     {
         data = dataReq;
         expectedCycles = cycleNum;
+        address = dAddress;
     }
 
     virtual void ExecuteTest()
     {
-        memory[PC_INIT] = IntSet::LDA_INDIRECTY;
-        memory[PC_INIT+1] = 0x20;
-        cpu.Y = 0x01;
-        memory[0x0020] = 0x02;
-        memory[0x0021] = 0x44;
-        memory[0x4403] = data;
+        memory[PC_INIT] = IntSet::LDA_IMMEDIATE;
+        memory[PC_INIT+1] = data;
+        memory[PC_INIT+2] = IntSet::LDY_IMMEDIATE;
+        memory[PC_INIT+3] = 0x13;
+        memory[PC_INIT+4] = IntSet::STA_INDIRECTY;
+        memory[PC_INIT+5] = 0x20;
+        memory[0x0020] = (BYTE) (address & 0xFF);
+        memory[0x0021] = (address>>8 & 0xFF);
 
         // Begin program execution
-        Execute(&cpu, &memory, (u32) 1); // Execute n instructions
+        Execute(&cpu, &memory, (u32) 3); // Execute n instructions
     }
 
     virtual void ValidateOutput()
     {
         error = false;
-        if (cpu.A != data)
+        if (memory[address+0x13] != data)
         {
-            std::cerr << "Incorrect data in Accumulator" << std::endl;
+            std::cerr << "Incorrect data in memory" << std::endl;
             error = true;
         }
 
-        if (data==0)
-        {
-            if (cpu.Z != 1)
-            {
-                std::cerr << "Incorrect value of Z flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (data &0b10000000 > 0)
-        {
-            if (cpu.N != 1)
-            {
-                std::cerr << "Incorrect value of N flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (cycles != expectedCycles)
-        {
-            std::cerr << "Incorrect number of cycles used" << std::endl;
-            error = true;
-        }
-    }
-};
-class tLDA_IndirectYWithPageCrossing: public BaseTest
-{
-    public:
-    BYTE data;
-
-    tLDA_IndirectYWithPageCrossing(BYTE dataReq, u32 cycleNum)
-    {
-        data = dataReq;
-        expectedCycles = cycleNum;
-    }
-
-    virtual void ExecuteTest()
-    {
-        memory[PC_INIT] = IntSet::LDA_INDIRECTY;
-        memory[PC_INIT+1] = 0x20;
-        cpu.Y = 0xFF;
-        memory[0x0020] = 0x02;
-        memory[0x0021] = 0x44;
-        memory[0x4501] = data;
-
-        // Begin program execution
-        Execute(&cpu, &memory, (u32) 1); // Execute n instructions
-    }
-
-    virtual void ValidateOutput()
-    {
-        error = false;
-        if (cpu.A != data)
-        {
-            std::cerr << "Incorrect data in Accumulator" << std::endl;
-            error = true;
-        }
-
-        if (data==0)
-        {
-            if (cpu.Z != 1)
-            {
-                std::cerr << "Incorrect value of Z flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (data &0b10000000 > 0)
-        {
-            if (cpu.N != 1)
-            {
-                std::cerr << "Incorrect value of N flag" << std::endl;
-                error = true;
-            }
-        }
-
-        if (cycles != expectedCycles)
+        if (cycles - (2+2) != expectedCycles)
         {
             std::cerr << "Incorrect number of cycles used" << std::endl;
             error = true;
@@ -435,20 +363,12 @@ int main(void)
         testObj.ValidateOutput();
     }
 
-    // {
-    //     message = "Running testpoint: tLDA_IndirectY to verify LDA with indirect Y addressing mode";
-    //     printTestAnnouncement(message);
-    //     tLDA_IndirectY testObj((BYTE) 0x29, (u32) 5);
-    //     testObj.ExecuteTest();
-    //     testObj.ValidateOutput();
-    // }
-
-    // {
-    //     message = "Running testpoint: tLDA_IndirectYWithPageCrossing to verify LDA with indirect Y addressing mode";
-    //     printTestAnnouncement(message);
-    //     tLDA_IndirectYWithPageCrossing testObj((BYTE) 0x29, (u32) 6);
-    //     testObj.ExecuteTest();
-    //     testObj.ValidateOutput();
-    // }
+    {
+        message = "Running testpoint: tSTA_IndirectY to verify STA with indirect Y addressing mode";
+        printTestAnnouncement(message);
+        tSTA_IndirectY testObj((BYTE) 0x29, (WORD) 0xFFD0, (u32) 6);
+        testObj.ExecuteTest();
+        testObj.ValidateOutput();
+    }
 }
 
