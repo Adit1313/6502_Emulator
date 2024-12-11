@@ -9,6 +9,24 @@ void initMemory(Mem *memory)
     }
 }
 
+// Stack - Memory interfacing
+
+void WriteStackToMemory(CPU *cpu, Mem *memory, BYTE value)
+{
+    WORD stackLocation = 0x100 | cpu->SP;
+    (*memory)[stackLocation] = value;
+}
+
+BYTE ReadStackFromMemory(CPU *cpu, Mem *memory)
+{
+    BYTE stackData;
+    WORD stackLocation = 0x100 | cpu->SP;
+    stackData = (*memory)[stackLocation];
+    return stackData;
+}
+
+// Interfacing directly with memory
+
 BYTE FetchByte(CPU *cpu, Mem *memory)
 {
     BYTE data = (*memory)[cpu->PC];

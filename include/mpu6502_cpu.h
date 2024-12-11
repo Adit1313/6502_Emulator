@@ -13,6 +13,9 @@ typedef enum {
 } OperandType;
 
 extern struct Mem memory;
+
+extern void WriteStackToMemory(CPU *cpu, Mem *memory, BYTE value);
+extern BYTE ReadStackFromMemory(CPU *cpu, Mem *memory);
 extern void initMemory(Mem *memory);
 extern BYTE FetchByte(CPU *cpu, Mem *memory);
 extern BYTE ReadByte(Mem *memory, WORD address);
@@ -73,11 +76,22 @@ struct IntSet
     static constexpr BYTE STY_ABSOLUTE = 0x8C;
     // JSR
     static constexpr BYTE JSR_ABSOLUTE = 0x20;
+    //RTS
+    static constexpr BYTE RTS = 0x60;
     // Invalid instruction
     static constexpr BYTE INVALID = 0x00;
 };
 
+// Functions to increment and decrement the stack
+
+void incrementStackPointer(CPU *cpu);
+
+void decrementStackPointer(CPU *cpu);
+
 // Functions for different addressing modes
+
+OperandValue impliedAddressingMode(CPU *cpu, Mem *mem, OperandType* opType);
+
 OperandValue fetchImmediate(CPU *cpu, Mem *mem, OperandType* opType);
 
 OperandValue fetchZeroPage(CPU *cpu, Mem *mem, OperandType* opType);
@@ -121,6 +135,8 @@ void STX(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
 void STY(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
 
 void JSR(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
+
+void RTS(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
 
 void NULL_CMD(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType);
 

@@ -8,7 +8,7 @@
 
 // Defines
 #define PC_INIT 0xFF00
-#define SP_INIT (BYTE) 0x1FF
+#define SP_INIT (BYTE) 0xFF
 
 // Defining memory sizes
 using BYTE = unsigned char;     // One Byte in memory (8-bit)

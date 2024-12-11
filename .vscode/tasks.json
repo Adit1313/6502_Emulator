@@ -8,7 +8,7 @@
                 "-fdiagnostics-color=always",
                 "${workspaceFolder}/src/*.cpp",
                 "${workspaceFolder}/tests/BaseTest/*.cpp",
-                "${workspaceFolder}/tests/STA/*.cpp",
+                "${workspaceFolder}/tests/JumpTests/*.cpp",
                 "-I",
                 "${workspaceFolder}/include",
                 "-I",

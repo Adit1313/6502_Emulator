@@ -8,7 +8,7 @@
             "name": "Debug built exe",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/debug/tSTA",
+            "program": "${workspaceFolder}/debug/tJumpTests",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",

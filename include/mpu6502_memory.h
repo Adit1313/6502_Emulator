@@ -9,6 +9,11 @@ extern struct CPU cpu;
 // initMemory - Rewrite the memory to 0s
 void initMemory(Mem *memory);
 
+// Write and read stack to memory
+void WriteStackToMemory(CPU *cpu, Mem *memory, BYTE value);
+
+BYTE ReadStackFromMemory(CPU *cpu, Mem *memory);
+
 BYTE FetchByte(CPU *cpu, Mem *memory);
 
 BYTE ReadByte(Mem *memory, WORD address);

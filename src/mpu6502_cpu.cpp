@@ -3,7 +3,28 @@
 u32 cycles = 0;
 OpcodeEntry opcodeTable[256];
 
+// Stack functions
+
+void incrementStackPointer(CPU *cpu)
+{
+    cpu->SP += 0x1;
+}
+
+void decrementStackPointer(CPU *cpu)
+{
+    cpu->SP -= 0x1;
+}
+
+
 // Functions for different addressing modes
+
+OperandValue impliedAddressingMode(CPU *cpu, Mem *mem, OperandType* opType)
+{
+    *opType = BYTE_OPERAND; // Assume a byte operand and return, does not matter anyways
+    OperandValue value = {0};
+    return value;
+}
+
 OperandValue fetchImmediate(CPU *cpu, Mem *mem, OperandType* opType) 
 {
     *opType = BYTE_OPERAND;
@@ -195,6 +216,7 @@ OperandValue fetchIndirectAddYAddress(CPU *cpu, Mem *mem, OperandType* opType)
 }
 
 // Functions for different instructions
+
 void LDA(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
 {
     cpu->A = opVal.byte;
@@ -233,13 +255,29 @@ void STY(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
 
 void JSR(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
 {
-    (*mem)[cpu->SP] = (cpu->PC) >> 8;
-    cpu->SP -= 1;
+    cpu->PC -= 0x1;
     cycles += 1;
-    (*mem)[cpu->SP] = cpu->PC;
-    cpu->SP -= 1;
+    WriteStackToMemory(cpu, mem, (cpu->PC) >> 8);
+    decrementStackPointer(cpu);
+    cycles += 1;
+    WriteStackToMemory(cpu, mem, cpu->PC);
+    decrementStackPointer(cpu);
     cycles += 1;
     cpu->PC = opVal.word;
+    cycles += 1;
+}
+
+void RTS(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
+{
+    incrementStackPointer(cpu);
+    WORD returnAddress = ReadStackFromMemory(cpu, mem);
+    cycles += 1;
+    incrementStackPointer(cpu);
+    returnAddress |= ReadStackFromMemory(cpu, mem) << 8;
+    cycles += 1;
+    cpu->PC=returnAddress;
+    cycles += 2;
+    cpu->PC += 1;
     cycles += 1;
 }
 
@@ -247,6 +285,8 @@ void NULL_CMD(CPU* cpu, Mem *mem, OperandValue opVal, OperandType opType)
 {
     // error case
 }
+
+// Init all opcodes
 
 void InitOpcodeTable()
 {
@@ -288,5 +328,7 @@ void InitOpcodeTable()
     opcodeTable[IntSet::STY_ABSOLUTE] = (OpcodeEntry){fetchAbsoluteAddress, STY};
 
     opcodeTable[IntSet::JSR_ABSOLUTE] = (OpcodeEntry){fetchAbsoluteAddress, JSR};
+    opcodeTable[IntSet::RTS] = (OpcodeEntry){impliedAddressingMode, RTS};
+
     opcodeTable[IntSet::INVALID] = (OpcodeEntry){fetchImmediate, NULL_CMD};
 }
