@@ -1,0 +1,64 @@
+#pragma once
+
+// ------ Includes ------
+#include "common.h"
+
+// ------ Defines ------
+#define RESET_VECTOR 0xFFFC // Points to the system reset routine
+#define STACK_POINTER_INIT 0x01FF
+
+/*
+CPU Contents:
+1. Program Counter  - 16 bits
+2. Stack Pointer - 8 bits
+3. Accumulator - 8 bits
+4. Register X - 8 bits
+5. Register Y - 8 bits
+6. Flags - 1 bit each, 8 bits total
+    Carry
+    Zero
+    Interrupt Disable
+    Decimal Mode
+    Break Command
+    Overflow Flag
+    Negative Flag 
+*/
+
+/*
+Boot behaviour:
+The reset vector tells the CPU where to find the system reset routine.
+The address of this routine is stored in low byte then high byte order.
+*/
+
+class cpu_6502 {
+    public:
+        cpu_6502();
+        ~cpu_6502();
+
+        enum FLAGS {
+            C = (1 << 0), // Carry Flag - Set if the last operation caused an overflow from bit 7 of the result or an underflow from bit 0.
+            Z = (1 << 1), // Zero Flag  - The zero flag is set if the result of the last operation as was zero.
+            I = (1 << 2), // Interrupt Disable - While this flag is set the processor will not respond to interrupts from devices until it is cleared.
+            D = (1 << 3), // Decimal Mode - While the decimal mode flag is set the processor will obey the rules of Binary Coded Decimal (BCD) arithmetic during addition and subtraction.
+            B = (1 << 4), // Break Command - The break command bit is set when a BRK instruction has been executed and an interrupt has been generated to process it.
+            V = (1 << 5), // Overflow Flag - The overflow flag is set during arithmetic operations if the result has yielded an invalid 2's complement result.
+            O = (1 << 6)  // Negative Flag - The negative flag is set if the result of the last operation had bit 7 set to a one.
+        };
+
+        void step();
+        void reset();
+        
+        void write(u16 address, u8 data);
+        u8 read(u16 address);
+
+        void set_flag(FLAGS f, bool value);
+        bool get_flag(FLAGS f);
+        
+    private:
+        u16 PC;
+        u8 SP;
+        u8 A;
+        u8 X;
+        u8 Y;
+        u8 flags;
+};

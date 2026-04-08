@@ -44,6 +44,7 @@ class tJumpAndReturn : public BaseTest
         if (cycles - (3+2) != expectedCycles)
         {
             std::cerr << "Incorrect number of cycles used" << std::endl;
+            std::cerr << "Expected: " << expectedCycles << "Used: " << cycles-(3+2) << std::endl;
             error = true;
         }
     }
