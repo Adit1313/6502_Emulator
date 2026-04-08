@@ -1,4 +1,5 @@
 #include "cpu_6502.h"
+#include "bus.h"
 
 CPU_6502::CPU_6502()
 {
@@ -49,21 +50,26 @@ void CPU_6502::reset()
     */
     // Standard cold start routine
     // set_flag(I, false); Do I need this?
-    SP = 0xFD;
+    SP = STACK_POINTER_INIT;
     u16 low = read(0xFFFC);
     u16 high = read(0xFFFD);
     PC = (high << 8) | low;
     current_cycles = 0;
 }
 
+void CPU_6502::connect_bus(Bus *bus)
+{
+    bus_ptr = bus;
+}
+
 u8 CPU_6502::read(u16 address)
 {
-    return 0; // For now until I create a bus or something
+    return bus_ptr->read(address);
 }
 
 void CPU_6502::write(u16 address, u8 data)
 {
-    // Do nothing for now until a bus or memory is added
+    bus_ptr->write(address, data);
 }
 
 // Addressing Mode Definitions
@@ -83,10 +89,15 @@ u8 CPU_6502::LDA()
     A = mem_data;
     return 0;
 }
+
+u8 CPU_6502::XXX()
+{
+    return 0;
+}
 #pragma endregion
 
 #pragma region Helper Functions
-u8 CPU_6502::fetch_mem()
+void CPU_6502::fetch_mem()
 {
     mem_data = read(addr_abs);
 }

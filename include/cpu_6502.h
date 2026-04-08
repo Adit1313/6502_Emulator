@@ -5,7 +5,7 @@
 
 // ------ Defines ------
 #define RESET_VECTOR 0xFFFC // Points to the system reset routine
-#define STACK_POINTER_INIT 0x01FF
+#define STACK_POINTER_INIT 0xFD
 
 /*
 CPU Contents:
@@ -30,6 +30,8 @@ The reset vector tells the CPU where to find the system reset routine.
 The address of this routine is stored in low byte then high byte order.
 */
 
+class Bus;
+
 class CPU_6502 {
     public:
         CPU_6502();
@@ -49,6 +51,7 @@ class CPU_6502 {
         void reset();
 
         // Bus Access Functions
+        void connect_bus(Bus *bus);
         void write(u16 address, u8 data);
         u8 read(u16 address);
 
@@ -58,18 +61,19 @@ class CPU_6502 {
         
     private:
         // Registers
-        u16 PC;
-        u8 SP;
-        u8 A;
-        u8 X;
-        u8 Y;
-        u8 flags;
+        u16 PC;     // Program Counter
+        u8 SP;      // Stack Pointer
+        u8 A;       // Accumulator
+        u8 X;       // Register X
+        u8 Y;       // Register Y
+        u8 flags;   // All flags
 
         // Internal States
-        u16 addr_abs; // Absolute address updated by addressing mode functions. This is used to fetch data for the instruction.
-        u16 addr_rel; // Relative address used for branching.
-        u8 mem_data;  // Variable to store fetched data for instructions.
-        u8 current_cycles; // Stores how many cycles left for current instruction execution.
+        u16 addr_abs;       // Absolute address updated by addressing mode functions. This is used to fetch data for the instruction.
+        u16 addr_rel;       // Relative address used for branching.
+        u8 mem_data;        // Variable to store fetched data for instructions.
+        u8 current_cycles;  // Stores how many cycles left for current instruction execution.
+        Bus *bus_ptr;           // Pointer to a bus object to read to / write from.
 
         // Opcode definitions
         struct Instruction {
@@ -88,5 +92,5 @@ class CPU_6502 {
         u8 IMM();
 
         // Helper Functions
-        u8 fetch_mem();
+        void fetch_mem();
 };
