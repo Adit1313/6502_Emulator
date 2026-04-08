@@ -28,15 +28,9 @@ void CPU_6502::clock()
     {
         u8 opcode = read(PC);
 
-        /*
-        Opcode fetched.
-        Now I need to fetch teh instruction entry
-        Then run addresing mode
-        Then operation
-        */
-
         // Fetch current instruction to be executed
         Instruction exec = opcode_table[opcode];
+        // Check if any extra cycles were needed for execution (Ex: Page boundary crossed)
         u8 extra_cycles_1 = (this->*exec.addrmode)();
         u8 extra_cycles_2 = (this->*exec.operation)();
 
@@ -87,6 +81,7 @@ u8 CPU_6502::LDA()
 {
     fetch_mem();
     A = mem_data;
+    return 0;
 }
 #pragma endregion
 
