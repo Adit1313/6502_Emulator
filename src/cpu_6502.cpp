@@ -13,10 +13,22 @@ CPU_6502::CPU_6502()
     // Populate valid opcodes
     opcode_table[0xA9] = {"LDA", &CPU::LDA, &CPU::IMM, 2};
     opcode_table[0xA5] = {"LDA", &CPU::LDA, &CPU::ZP, 3};
+    opcode_table[0xB5] = {"LDA", &CPU::LDA, &CPU::ZPX, 4};
+    opcode_table[0xAD] = {"LDA", &CPU::LDA, &CPU::ABS, 4};
+    opcode_table[0xBD] = {"LDA", &CPU::LDA, &CPU::ABSX, 4};
+    opcode_table[0xB9] = {"LDA", &CPU::LDA, &CPU::ABSY, 4};
+
     opcode_table[0xA2] = {"LDX", &CPU::LDX, &CPU::IMM, 2};
     opcode_table[0xA6] = {"LDX", &CPU::LDX, &CPU::ZP, 3};
+    opcode_table[0xB6] = {"LDX", &CPU::LDX, &CPU::ZPY, 4};
+    opcode_table[0xAE] = {"LDX", &CPU::LDX, &CPU::ABS, 4};
+    opcode_table[0xBE] = {"LDX", &CPU::LDX, &CPU::ABSY, 4};
+
     opcode_table[0xA0] = {"LDY", &CPU::LDY, &CPU::IMM, 2};
     opcode_table[0xA4] = {"LDY", &CPU::LDY, &CPU::ZP, 3};
+    opcode_table[0xB4] = {"LDY", &CPU::LDY, &CPU::ZPX, 4};
+    opcode_table[0xAC] = {"LDY", &CPU::LDY, &CPU::ABS, 4};
+    opcode_table[0xBC] = {"LDY", &CPU::LDY, &CPU::ABSX, 4};
 
     addr_abs = 0;
     addr_rel = 0;
@@ -90,6 +102,47 @@ u8 CPU_6502::IMM()
 u8 CPU_6502::ZP()
 {
     addr_abs = read(PC++);
+    return 0;
+}
+
+u8 CPU_6502::ZPX()
+{
+    addr_abs = read(PC++ + X);
+    return 0;
+}
+
+u8 CPU_6502::ZPY()
+{
+    addr_abs = read(PC++ + Y);
+    return 0;
+}
+
+u8 CPU_6502::ABS()
+{
+    addr_abs = read(PC++);
+    addr_abs = (addr_abs << 8) | read(PC++);
+    return 0;
+}
+
+u8 CPU_6502::ABSX()
+{
+    u16 base = read(PC++);
+    base = (base << 8) | read(PC++);
+    addr_abs = base + X;
+
+    if ((addr_abs && 0xFF00) != (base && 0xFF00))
+        return 1;
+    return 0;
+}
+
+u8 CPU_6502::ABSY()
+{
+    u16 base = read(PC++);
+    base = (base << 8) | read(PC++);
+    addr_abs = base + Y;
+
+    if ((addr_abs && 0xFF00) != (base && 0xFF00))
+        return 1;
     return 0;
 }
 #pragma endregion

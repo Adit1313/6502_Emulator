@@ -93,6 +93,11 @@ class CPU_6502 {
         // Addressing Modes
         u8 IMM();
         u8 ZP();
+        u8 ZPX();
+        u8 ZPY();
+        u8 ABS();
+        u8 ABSX();
+        u8 ABSY();
 
         // Helper Functions
         void fetch_mem();
