@@ -12,6 +12,11 @@ CPU_6502::CPU_6502()
     }
     // Populate valid opcodes
     opcode_table[0xA9] = {"LDA", &CPU::LDA, &CPU::IMM, 2};
+    opcode_table[0xA5] = {"LDA", &CPU::LDA, &CPU::ZP, 3};
+    opcode_table[0xA2] = {"LDX", &CPU::LDX, &CPU::IMM, 2};
+    opcode_table[0xA6] = {"LDX", &CPU::LDX, &CPU::ZP, 3};
+    opcode_table[0xA0] = {"LDY", &CPU::LDY, &CPU::IMM, 2};
+    opcode_table[0xA4] = {"LDY", &CPU::LDY, &CPU::ZP, 3};
 
     addr_abs = 0;
     addr_rel = 0;
@@ -79,6 +84,12 @@ void CPU_6502::write(u16 address, u8 data)
 u8 CPU_6502::IMM()
 {
     addr_abs = PC++;
+    return 0;
+}
+
+u8 CPU_6502::ZP()
+{
+    addr_abs = read(PC++);
     return 0;
 }
 #pragma endregion
