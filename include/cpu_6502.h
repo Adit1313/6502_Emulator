@@ -30,10 +30,10 @@ The reset vector tells the CPU where to find the system reset routine.
 The address of this routine is stored in low byte then high byte order.
 */
 
-class cpu_6502 {
+class CPU_6502 {
     public:
-        cpu_6502();
-        ~cpu_6502();
+        CPU_6502();
+        ~CPU_6502();
 
         enum FLAGS {
             C = (1 << 0), // Carry Flag - Set if the last operation caused an overflow from bit 7 of the result or an underflow from bit 0.
@@ -47,7 +47,7 @@ class cpu_6502 {
 
         void step();
         void reset();
-        
+
         void write(u16 address, u8 data);
         u8 read(u16 address);
 
@@ -61,4 +61,19 @@ class cpu_6502 {
         u8 X;
         u8 Y;
         u8 flags;
+
+        struct Instruction {
+            const char* name;
+            u8 (CPU_6502::*operate)(void);
+            u8 (CPU_6502::*addrmode)(void);
+            u8 cycles;      
+        };
+        Instruction opcode_table[256];
+
+        // Instructions
+        u8 LDA(); // Load Accumulator
+        u8 XXX(); // Illegal Opcode
+
+        // Addressing Modes
+        u8 IMM();
 };
