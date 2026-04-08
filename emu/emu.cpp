@@ -12,7 +12,7 @@ int main()
     my_bus.write(0xFFFC, 0);
 
     my_bus.write(0x200, 0xA9);
-    my_bus.write(0x201, 0x3);
+    my_bus.write(0x201, 0x8F);
 
     printf("%d", my_bus.read(0x200));
 

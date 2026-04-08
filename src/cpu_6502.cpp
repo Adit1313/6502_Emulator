@@ -29,6 +29,8 @@ void CPU_6502::clock()
     {
         u8 opcode = read(PC);
 
+        PC++;
+
         // Fetch current instruction to be executed
         Instruction exec = opcode_table[opcode];
         // Check if any extra cycles were needed for execution (Ex: Page boundary crossed)
@@ -87,12 +89,38 @@ u8 CPU_6502::LDA()
 {
     fetch_mem();
     A = mem_data;
+    if (A == 0)
+        SET_BIT(flags, Z);
+    if (GET_BIT(A, 7))
+        SET_BIT(flags, N);
+    return 0;
+}
+
+u8 CPU_6502::LDX()
+{
+    fetch_mem();
+    X = mem_data;
+    if (X == 0)
+        SET_BIT(flags, Z);
+    if (GET_BIT(X, 7))
+        SET_BIT(flags, N);
+    return 0;
+}
+
+u8 CPU_6502::LDY()
+{
+    fetch_mem();
+    Y = mem_data;
+    if (Y == 0)
+        SET_BIT(flags, Z);
+    if (GET_BIT(Y, 7))
+        SET_BIT(flags, N);
     return 0;
 }
 
 u8 CPU_6502::XXX()
 {
-    return 0;
+    return 0; // idk what to do here
 }
 #pragma endregion
 

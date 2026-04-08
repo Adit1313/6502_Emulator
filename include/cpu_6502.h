@@ -38,13 +38,13 @@ class CPU_6502 {
         ~CPU_6502();
 
         enum FLAGS {
-            C = (1 << 0), // Carry Flag - Set if the last operation caused an overflow from bit 7 of the result or an underflow from bit 0.
-            Z = (1 << 1), // Zero Flag  - The zero flag is set if the result of the last operation as was zero.
-            I = (1 << 2), // Interrupt Disable - While this flag is set the processor will not respond to interrupts from devices until it is cleared.
-            D = (1 << 3), // Decimal Mode - While the decimal mode flag is set the processor will obey the rules of Binary Coded Decimal (BCD) arithmetic during addition and subtraction.
-            B = (1 << 4), // Break Command - The break command bit is set when a BRK instruction has been executed and an interrupt has been generated to process it.
-            V = (1 << 5), // Overflow Flag - The overflow flag is set during arithmetic operations if the result has yielded an invalid 2's complement result.
-            O = (1 << 6)  // Negative Flag - The negative flag is set if the result of the last operation had bit 7 set to a one.
+            C = 0, // Carry Flag - Set if the last operation caused an overflow from bit 7 of the result or an underflow from bit 0.
+            Z = 1, // Zero Flag  - The zero flag is set if the result of the last operation as was zero.
+            I = 2, // Interrupt Disable - While this flag is set the processor will not respond to interrupts from devices until it is cleared.
+            D = 3, // Decimal Mode - While the decimal mode flag is set the processor will obey the rules of Binary Coded Decimal (BCD) arithmetic during addition and subtraction.
+            B = 4, // Break Command - The break command bit is set when a BRK instruction has been executed and an interrupt has been generated to process it.
+            V = 5, // Overflow Flag - The overflow flag is set during arithmetic operations if the result has yielded an invalid 2's complement result.
+            N = 6  // Negative Flag - The negative flag is set if the result of the last operation had bit 7 set to a one.
         };
 
         void clock();
@@ -86,6 +86,8 @@ class CPU_6502 {
 
         // Instructions
         u8 LDA(); // Load Accumulator
+        u8 LDX(); // Load Register X
+        u8 LDY(); // Load Register Y
         u8 XXX(); // Illegal Opcode
 
         // Addressing Modes
