@@ -45,16 +45,19 @@ class CPU_6502 {
             O = (1 << 6)  // Negative Flag - The negative flag is set if the result of the last operation had bit 7 set to a one.
         };
 
-        void step();
+        void clock();
         void reset();
 
+        // Bus Access Functions
         void write(u16 address, u8 data);
         u8 read(u16 address);
 
+        // Helper Functions
         void set_flag(FLAGS f, bool value);
         bool get_flag(FLAGS f);
         
     private:
+        // Registers
         u16 PC;
         u8 SP;
         u8 A;
@@ -62,9 +65,16 @@ class CPU_6502 {
         u8 Y;
         u8 flags;
 
+        // Internal States
+        u16 addr_abs; // Absolute address updated by addressing mode functions. This is used to fetch data for the instruction.
+        u16 addr_rel; // Relative address used for branching.
+        u8 mem_data;  // Variable to store fetched data for instructions.
+        u8 current_cycles; // Stores how many cycles left for current instruction execution.
+
+        // Opcode definitions
         struct Instruction {
             const char* name;
-            u8 (CPU_6502::*operate)(void);
+            u8 (CPU_6502::*operation)(void);
             u8 (CPU_6502::*addrmode)(void);
             u8 cycles;      
         };
@@ -76,4 +86,7 @@ class CPU_6502 {
 
         // Addressing Modes
         u8 IMM();
+
+        // Helper Functions
+        u8 fetch_mem();
 };
