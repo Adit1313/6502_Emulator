@@ -19,3 +19,8 @@ void Bus::write(u16 address, u8 data)
 {
     ram[address] = data;
 }
+
+void Bus::reset()
+{
+    ram.fill(0);
+}

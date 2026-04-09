@@ -1,19 +1,23 @@
 cmake_minimum_required(VERSION 3.16)
-
 project(emu6502)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Create executable
-add_executable(emu
-    emu/emu.cpp
+# Core library
+add_library(emu_core
     src/cpu_6502.cpp
     src/bus.cpp
+    src/emulator.cpp
 )
 
-# Include directories
-target_include_directories(emu PRIVATE
-    include
-    emu
-)
+target_include_directories(emu_core PUBLIC include)
+
+# Main executable
+add_executable(emu emu/main.cpp)
+target_link_libraries(emu emu_core)
+
+# Enable testing
+enable_testing()
+
+# Add tests
+#add_subdirectory(tests)

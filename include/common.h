@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stdint.h>
+#include <array>
+#include <vector>
 
 #define u64 uint64_t
 #define u32 uint32_t
