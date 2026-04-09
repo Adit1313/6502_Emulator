@@ -20,4 +20,4 @@ target_link_libraries(emu emu_core)
 enable_testing()
 
 # Add tests
-#add_subdirectory(tests)
+add_subdirectory(tests)

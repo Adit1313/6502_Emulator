@@ -30,6 +30,12 @@ The reset vector tells the CPU where to find the system reset routine.
 The address of this routine is stored in low byte then high byte order.
 */
 
+struct CPU_State
+{
+    u16 PC;
+    u8 SP, A, X, Y, flags;
+};
+
 class Bus;
 
 class CPU_6502 {
@@ -58,6 +64,7 @@ class CPU_6502 {
         // Helper Functions
         void set_flag(FLAGS f, bool value);
         bool get_flag(FLAGS f);
+        CPU_State get_CPU_State();
         
     private:
         // Registers

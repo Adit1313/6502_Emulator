@@ -157,6 +157,8 @@ u8 CPU_6502::LDA()
         SET_BIT(flags, Z);
     if (GET_BIT(A, 7))
         SET_BIT(flags, N);
+    else
+        CLEAR_BIT(flags, N);
     return 0;
 }
 
@@ -168,6 +170,8 @@ u8 CPU_6502::LDX()
         SET_BIT(flags, Z);
     if (GET_BIT(X, 7))
         SET_BIT(flags, N);
+    else
+        CLEAR_BIT(flags, N);
     return 0;
 }
 
@@ -179,6 +183,8 @@ u8 CPU_6502::LDY()
         SET_BIT(flags, Z);
     if (GET_BIT(Y, 7))
         SET_BIT(flags, N);
+    else
+        CLEAR_BIT(flags, N);
     return 0;
 }
 
@@ -205,5 +211,10 @@ void CPU_6502::set_flag(FLAGS f, bool value)
 bool CPU_6502::get_flag(FLAGS f)
 {
     return GET_BIT(flags, f);
+}
+
+CPU_State CPU_6502::get_CPU_State()
+{
+    return {PC, SP, A, X, Y, flags};
 }
 #pragma endregion
