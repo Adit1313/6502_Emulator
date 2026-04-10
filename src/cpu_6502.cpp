@@ -107,13 +107,13 @@ u8 CPU_6502::ZP()
 
 u8 CPU_6502::ZPX()
 {
-    addr_abs = read(PC++ + X);
+    addr_abs = read(PC++)+X;
     return 0;
 }
 
 u8 CPU_6502::ZPY()
 {
-    addr_abs = read(PC++ + Y);
+    addr_abs = read(PC++)+Y;
     return 0;
 }
 
