@@ -55,6 +55,14 @@ CPU_6502::CPU_6502()
     opcode_table[0x8A] = {"TXA", &CPU::TXA, &CPU::IMP, 2};
     opcode_table[0x98] = {"TYA", &CPU::TYA, &CPU::IMP, 2};
 
+    opcode_table[0xBA] = {"TSX", &CPU::TSX, &CPU::IMP, 2};
+    opcode_table[0x9A] = {"TXS", &CPU::TXS, &CPU::IMP, 2};
+    opcode_table[0x49] = {"PHA", &CPU::PHA, &CPU::IMP, 3};
+    opcode_table[0x08] = {"PHP", &CPU::PHP, &CPU::IMP, 3};
+    opcode_table[0x68] = {"PLA", &CPU::PLA, &CPU::IMP, 4};
+    opcode_table[0x28] = {"PLP", &CPU::PLP, &CPU::IMP, 4};
+
+
     #pragma endregion
 
     addr_abs = 0;
@@ -261,6 +269,43 @@ u8 CPU_6502::TYA()
 {
     A = Y;
     update_zn_flags(A);
+    return 0;
+}
+
+u8 CPU_6502::TSX()
+{
+    X = SP;
+    update_zn_flags(X);
+    return 0;
+}
+
+u8 CPU_6502::TXS()
+{
+    SP = X;
+    return 0;
+}
+
+u8 CPU_6502::PHA()
+{
+    write(0x100 + SP--, A);
+    return 0;
+}
+
+u8 CPU_6502::PHP()
+{
+    write(0x100 + SP--, flags);
+    return 0;
+}
+
+u8 CPU_6502::PLA()
+{
+    A = read(0x100 + ++SP);
+    return 0;
+}
+
+u8 CPU_6502::PLP()
+{
+    flags = read(0x100 + ++SP);
     return 0;
 }
 

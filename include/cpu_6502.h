@@ -106,6 +106,14 @@ class CPU_6502 {
         u8 TXA();   // Transfer X to A
         u8 TYA();   // Transfer Y to A
 
+        // Stack Operations
+        u8 TSX();
+        u8 TXS();
+        u8 PHA();
+        u8 PHP();
+        u8 PLA();
+        u8 PLP();
+
         // Illegal Opcode
         u8 XXX();
 
