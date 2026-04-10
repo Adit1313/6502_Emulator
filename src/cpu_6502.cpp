@@ -32,6 +32,11 @@ CPU_6502::CPU_6502()
     opcode_table[0xAC] = {"LDY", &CPU::LDY, &CPU::ABS, 4};
     opcode_table[0xBC] = {"LDY", &CPU::LDY, &CPU::ABSX, 4};
 
+    opcode_table[0xAA] = {"TAX", &CPU::TAX, &CPU::IMP, 2};
+    opcode_table[0xA8] = {"TAY", &CPU::TAY, &CPU::IMP, 2};
+    opcode_table[0x8A] = {"TXA", &CPU::TXA, &CPU::IMP, 2};
+    opcode_table[0x98] = {"TYA", &CPU::TYA, &CPU::IMP, 2};
+
     addr_abs = 0;
     addr_rel = 0;
     mem_data = 0;
@@ -95,6 +100,11 @@ void CPU_6502::write(u16 address, u8 data)
 
 // Addressing Mode Definitions
 #pragma region Addressing Mode Definitions
+u8 CPU_6502::IMP()
+{
+    return 0;
+}
+
 u8 CPU_6502::IMM()
 {
     addr_abs = PC++;
@@ -211,6 +221,30 @@ u8 CPU_6502::LDY()
     else
         CLEAR_BIT(flags, N);
 
+    return 0;
+}
+
+u8 CPU_6502::TAX()
+{
+    X = A;
+    return 0;
+}
+
+u8 CPU_6502::TAY()
+{
+    Y = A;
+    return 0;
+}
+
+u8 CPU_6502::TXA()
+{
+    A = X;
+    return 0;
+}
+
+u8 CPU_6502::TYA()
+{
+    A = Y;
     return 0;
 }
 

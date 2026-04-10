@@ -92,12 +92,21 @@ class CPU_6502 {
         Instruction opcode_table[256];
 
         // Instructions
+        // Load Stores
         u8 LDA(); // Load Accumulator
         u8 LDX(); // Load Register X
         u8 LDY(); // Load Register Y
+
+        // Register Transfers
+        u8 TAX();
+        u8 TAY();
+        u8 TXA();
+        u8 TYA();
+
         u8 XXX(); // Illegal Opcode
 
         // Addressing Modes
+        u8 IMP();
         u8 IMM();
         u8 ZP();
         u8 ZPX();
