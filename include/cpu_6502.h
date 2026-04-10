@@ -91,32 +91,35 @@ class CPU_6502 {
         };
         Instruction opcode_table[256];
 
-        // Instructions
-        // Load Stores
-        u8 LDA(); // Load Accumulator
-        u8 LDX(); // Load Register X
-        u8 LDY(); // Load Register Y
+        // ---- Instructions ----
+        // Load and Stores
+        u8 LDA();   // Load Accumulator
+        u8 LDX();   // Load Register X
+        u8 LDY();   // Load Register Y
+        u8 STA();   // Store Accumulator
+        u8 STX();   // Store Register X
+        u8 STY();   // Store Register Y
 
         // Register Transfers
-        u8 TAX();
-        u8 TAY();
-        u8 TXA();
-        u8 TYA();
+        u8 TAX();   // Transfer A to X
+        u8 TAY();   // Transfer A to Y
+        u8 TXA();   // Transfer X to A
+        u8 TYA();   // Transfer Y to A
 
         // Illegal Opcode
         u8 XXX();
 
         // Addressing Modes
-        u8 IMP();
-        u8 IMM();
-        u8 ZP();
-        u8 ZPX();
-        u8 ZPY();
-        u8 ABS();
-        u8 ABSX();
-        u8 ABSY();
-        u8 IZX();
-        u8 IZY();
+        u8 IMP();   // Implied
+        u8 IMM();   // Immediate
+        u8 ZP();    // Zero Page
+        u8 ZPX();   // Zero Page, X
+        u8 ZPY();   // Zero Page, Y
+        u8 ABS();   // Absolute
+        u8 ABSX();  // Absolute, X
+        u8 ABSY();  // Absolute, Y
+        u8 IZX();   // Indexed Indirect
+        u8 IZY();   // Indirect Indexed
 
         // Helper Functions
         void fetch_mem();

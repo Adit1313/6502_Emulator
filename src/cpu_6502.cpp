@@ -10,7 +10,9 @@ CPU_6502::CPU_6502()
     {
         opcode_table[idx] = {"XXX", &CPU::XXX, &CPU::IMM, 1};
     }
-    // Populate valid opcodes
+    
+    #pragma region Opcode Definition
+
     opcode_table[0xA9] = {"LDA", &CPU::LDA, &CPU::IMM, 2};
     opcode_table[0xA5] = {"LDA", &CPU::LDA, &CPU::ZP, 3};
     opcode_table[0xB5] = {"LDA", &CPU::LDA, &CPU::ZPX, 4};
@@ -32,10 +34,28 @@ CPU_6502::CPU_6502()
     opcode_table[0xAC] = {"LDY", &CPU::LDY, &CPU::ABS, 4};
     opcode_table[0xBC] = {"LDY", &CPU::LDY, &CPU::ABSX, 4};
 
+    opcode_table[0x85] = {"STA", &CPU::STA, &CPU::ZP, 3};
+    opcode_table[0x95] = {"STA", &CPU::STA, &CPU::ZPX, 4};
+    opcode_table[0x8D] = {"STA", &CPU::STA, &CPU::ABS, 4};
+    opcode_table[0x9D] = {"STA", &CPU::STA, &CPU::ABSX, 5};
+    opcode_table[0x99] = {"STA", &CPU::STA, &CPU::ABSY, 5};
+    opcode_table[0x81] = {"STA", &CPU::STA, &CPU::IZX, 6};
+    opcode_table[0x91] = {"STA", &CPU::STA, &CPU::IZY, 6};
+
+    opcode_table[0x86] = {"STX", &CPU::STX, &CPU::ZP, 3};
+    opcode_table[0x96] = {"STX", &CPU::STX, &CPU::ZPY, 4};
+    opcode_table[0x8E] = {"STX", &CPU::STX, &CPU::ABS, 4};
+
+    opcode_table[0x84] = {"STY", &CPU::STY, &CPU::ZP, 3};
+    opcode_table[0x94] = {"STY", &CPU::STY, &CPU::ZPX, 4};
+    opcode_table[0x8C] = {"STY", &CPU::STY, &CPU::ABS, 4};
+
     opcode_table[0xAA] = {"TAX", &CPU::TAX, &CPU::IMP, 2};
     opcode_table[0xA8] = {"TAY", &CPU::TAY, &CPU::IMP, 2};
     opcode_table[0x8A] = {"TXA", &CPU::TXA, &CPU::IMP, 2};
     opcode_table[0x98] = {"TYA", &CPU::TYA, &CPU::IMP, 2};
+
+    #pragma endregion
 
     addr_abs = 0;
     addr_rel = 0;
@@ -221,6 +241,24 @@ u8 CPU_6502::LDY()
     else
         CLEAR_BIT(flags, N);
 
+    return 0;
+}
+
+u8 CPU_6502::STA()
+{
+    write(addr_abs, A);
+    return 0;
+}
+
+u8 CPU_6502::STX()
+{
+    write(addr_abs, X);
+    return 0;
+}
+
+u8 CPU_6502::STY()
+{
+    write(addr_abs, Y);
     return 0;
 }
 
