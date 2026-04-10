@@ -180,3 +180,21 @@ TEST_CASE("LDA with IZX addressing", "[LDA][IZX]")
         REQUIRE(state.A == 0x69);
     }
 }
+
+TEST_CASE("LDA with IZY addressing", "[LDA][IZY]")
+{
+    Emulator emu;
+    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset. PC breaks without this
+    emu.load_bytes_at_address(0x200, std::vector<u8> {0xA0, 0x3, 0xB1, 0x20});
+    emu.load_bytes_at_address(0x20, std::vector<u8> {0x12, 0x31});
+    emu.load_bytes_at_address(0x1234, std::vector<u8> {0x69});
+    emu.reset(emu.RST_CPU);
+    
+    SECTION("Verify accumulator value")
+    {
+        emu.execute(6);
+        auto cpu = emu.get_CPU_obj();
+        auto state = cpu.get_CPU_State();
+        REQUIRE(state.A == 0x69);
+    }
+}

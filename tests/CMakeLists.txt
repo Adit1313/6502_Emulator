@@ -1,12 +1,17 @@
-add_executable(LDA_Tests tLDA.cpp)
-
-target_link_libraries(LDA_Tests
-PRIVATE 
-emu_core
-Catch2::Catch2WithMain)
-
-# add_test(NAME LDA_Tests COMMAND LDA_Tests)
 include(CTest)
 include(Catch)
 
+# ---- LDA ----
+add_executable(LDA_Tests tLDA.cpp)
+target_link_libraries(LDA_Tests PRIVATE emu_core Catch2::Catch2WithMain)
 catch_discover_tests(LDA_Tests)
+
+# ---- LDX ----
+add_executable(LDX_Tests tLDX.cpp)
+target_link_libraries(LDX_Tests PRIVATE emu_core Catch2::Catch2WithMain)
+catch_discover_tests(LDX_Tests)
+
+# ---- LDY ----
+add_executable(LDY_Tests tLDY.cpp)
+target_link_libraries(LDY_Tests PRIVATE emu_core Catch2::Catch2WithMain)
+catch_discover_tests(LDY_Tests)
