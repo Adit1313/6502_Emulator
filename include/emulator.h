@@ -32,7 +32,7 @@ class Emulator
 
         // Helper Functions
         const CPU_6502& get_CPU_obj() const {return emu_cpu;}
-        const Bus& get_Bus_obj() const {return emu_bus;}
+        const Bus& get_bus_obj() const {return emu_bus;}
 
         // Variables
         u32 elapsed_cycles;
