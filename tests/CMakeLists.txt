@@ -17,9 +17,9 @@ target_link_libraries(LDY_Tests PRIVATE emu_core Catch2::Catch2WithMain)
 catch_discover_tests(LDY_Tests)
 
 # ---- STA ----
-add_executable(STA_Tests tSTA.cpp)
-target_link_libraries(STA_Tests PRIVATE emu_core Catch2::Catch2WithMain)
-catch_discover_tests(STA_Tests)
+add_executable(Store_Tests tStore.cpp)
+target_link_libraries(Store_Tests PRIVATE emu_core Catch2::Catch2WithMain)
+catch_discover_tests(Store_Tests)
 
 # ---- TAX, TAY, TXA, TYA ----
 add_executable(Transfer_Tests tTransfer.cpp)
