@@ -57,7 +57,7 @@ CPU_6502::CPU_6502()
 
     opcode_table[0xBA] = {"TSX", &CPU::TSX, &CPU::IMP, 2};
     opcode_table[0x9A] = {"TXS", &CPU::TXS, &CPU::IMP, 2};
-    opcode_table[0x49] = {"PHA", &CPU::PHA, &CPU::IMP, 3};
+    opcode_table[0x48] = {"PHA", &CPU::PHA, &CPU::IMP, 3};
     opcode_table[0x08] = {"PHP", &CPU::PHP, &CPU::IMP, 3};
     opcode_table[0x68] = {"PLA", &CPU::PLA, &CPU::IMP, 4};
     opcode_table[0x28] = {"PLP", &CPU::PLP, &CPU::IMP, 4};

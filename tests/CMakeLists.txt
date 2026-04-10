@@ -16,6 +16,11 @@ add_executable(LDY_Tests tLDY.cpp)
 target_link_libraries(LDY_Tests PRIVATE emu_core Catch2::Catch2WithMain)
 catch_discover_tests(LDY_Tests)
 
+# ---- TSX, TXS, PHA, PHP, PLA, PLP ----
+add_executable(Stack_Tests tStack.cpp)
+target_link_libraries(Stack_Tests PRIVATE emu_core Catch2::Catch2WithMain)
+catch_discover_tests(Stack_Tests)
+
 # ---- STA, STX, STY ----
 add_executable(Store_Tests tStore.cpp)
 target_link_libraries(Store_Tests PRIVATE emu_core Catch2::Catch2WithMain)
