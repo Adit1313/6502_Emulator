@@ -26,7 +26,8 @@ class Emulator
 
         // Functions
         void load_bytes_at_address(u16 address, const std::vector<u8>& data_sequence);
-        void step();
+        void step(); // Executes a single step of the emulator
+        void execute(u32 steps); // Executes n steps of the emulator
         void reset(RESET_FLAG f);
 
         // Helper Functions

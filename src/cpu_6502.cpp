@@ -155,6 +155,9 @@ u8 CPU_6502::LDA()
     A = mem_data;
     if (A == 0)
         SET_BIT(flags, Z);
+    else
+        CLEAR_BIT(flags, Z);
+
     if (GET_BIT(A, 7))
         SET_BIT(flags, N);
     else

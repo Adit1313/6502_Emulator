@@ -18,6 +18,15 @@ void Emulator::step()
     elapsed_cycles += 1;
 }
 
+void Emulator::execute(u32 steps)
+{
+    while (steps > 0)
+    {
+        step();
+        steps--;
+    }
+}
+
 void Emulator::reset(RESET_FLAG f)
 {
     if (f == RST_EMULATOR)
