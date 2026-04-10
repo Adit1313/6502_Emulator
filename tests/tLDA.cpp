@@ -13,7 +13,7 @@ TEST_CASE("LDA flag behaviour", "[LDA]")
         emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x8F});
         emu.execute(2); // Execute 2 steps
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(cpu.get_flag(CPU_6502::N) == 1);
     }
 
@@ -22,7 +22,7 @@ TEST_CASE("LDA flag behaviour", "[LDA]")
         emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x8F, 0xA9, 0x2});
         emu.execute(4); // Execute 2 steps
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(cpu.get_flag(CPU_6502::N) == 0);
     }
 
@@ -31,7 +31,7 @@ TEST_CASE("LDA flag behaviour", "[LDA]")
         emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x0});
         emu.execute(2); // Execute 2 steps
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(cpu.get_flag(CPU_6502::Z) == 1);
     }
 
@@ -40,7 +40,7 @@ TEST_CASE("LDA flag behaviour", "[LDA]")
         emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x0, 0xA9, 0x1});
         emu.execute(4); // Execute 2 steps
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(cpu.get_flag(CPU_6502::Z) == 0);
     }
 }
@@ -56,7 +56,7 @@ TEST_CASE("LDA with IMM addressing", "[LDA][IMM]")
         emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x8F});
         emu.execute(2); // Execute 2 steps
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.A == 0x8F);
     }
 }
@@ -73,7 +73,7 @@ TEST_CASE("LDA with ZP addressing", "[LDA][ZP]")
         emu.load_bytes_at_address(0x20, std::vector<u8> {0xA5});
         emu.execute(3); 
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.A == 0xA5);
     }
 }
@@ -94,7 +94,7 @@ TEST_CASE("LDA with ZPX addressing", "[LDA][ZPX]")
         emu.load_bytes_at_address(0x21, std::vector<u8> {0xA5});
         emu.execute(5);
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.A == 0xA5);
     }
 }
@@ -115,7 +115,7 @@ TEST_CASE("LDA with ABS addressing", "[LDA][ABS]")
     {
         emu.execute(4);
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.A == 0x69);
     }
 }
@@ -132,7 +132,7 @@ TEST_CASE("LDA with ABSX addressing", "[LDA][ABSX]")
     {
         emu.execute(6);
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.A == 0x69);
     }
 }
@@ -149,7 +149,7 @@ TEST_CASE("LDA with ABSY addressing", "[LDA][ABSY]")
     {
         emu.execute(6);
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.A == 0x69);
     }
 }
@@ -167,7 +167,7 @@ TEST_CASE("LDA with IZX addressing", "[LDA][IZX]")
     {
         emu.execute(6);
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.A == 0x69);
     }
 
@@ -176,7 +176,7 @@ TEST_CASE("LDA with IZX addressing", "[LDA][IZX]")
         emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x26, 0xA1, 0xFF});
         emu.execute(6);
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.A == 0x69);
     }
 }
@@ -194,7 +194,7 @@ TEST_CASE("LDA with IZY addressing", "[LDA][IZY]")
     {
         emu.execute(6);
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.A == 0x69);
     }
 }

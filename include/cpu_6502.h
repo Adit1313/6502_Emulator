@@ -64,7 +64,7 @@ class CPU_6502 {
         // Helper Functions
         void set_flag(FLAGS f, bool value);
         bool get_flag(FLAGS f);
-        CPU_State get_CPU_State();
+        CPU_State get_CPU_state();
         
     private:
         // Registers
@@ -103,7 +103,8 @@ class CPU_6502 {
         u8 TXA();
         u8 TYA();
 
-        u8 XXX(); // Illegal Opcode
+        // Illegal Opcode
+        u8 XXX();
 
         // Addressing Modes
         u8 IMP();
@@ -119,4 +120,5 @@ class CPU_6502 {
 
         // Helper Functions
         void fetch_mem();
+        inline void update_zn_flags(u8 reg);
 };

@@ -227,24 +227,60 @@ u8 CPU_6502::LDY()
 u8 CPU_6502::TAX()
 {
     X = A;
+    if (X == 0)
+        SET_BIT(flags, Z);
+    else
+        CLEAR_BIT(flags, Z);
+
+    if (GET_BIT(X, 7))
+        SET_BIT(flags, N);
+    else
+        CLEAR_BIT(flags, N);
     return 0;
 }
 
 u8 CPU_6502::TAY()
 {
     Y = A;
+    if (Y == 0)
+        SET_BIT(flags, Z);
+    else
+        CLEAR_BIT(flags, Z);
+
+    if (GET_BIT(Y, 7))
+        SET_BIT(flags, N);
+    else
+        CLEAR_BIT(flags, N);
     return 0;
 }
 
 u8 CPU_6502::TXA()
 {
     A = X;
+    if (A == 0)
+        SET_BIT(flags, Z);
+    else
+        CLEAR_BIT(flags, Z);
+
+    if (GET_BIT(A, 7))
+        SET_BIT(flags, N);
+    else
+        CLEAR_BIT(flags, N);
     return 0;
 }
 
 u8 CPU_6502::TYA()
 {
     A = Y;
+    if (A == 0)
+        SET_BIT(flags, Z);
+    else
+        CLEAR_BIT(flags, Z);
+
+    if (GET_BIT(A, 7))
+        SET_BIT(flags, N);
+    else
+        CLEAR_BIT(flags, N);
     return 0;
 }
 
@@ -273,8 +309,13 @@ bool CPU_6502::get_flag(FLAGS f)
     return GET_BIT(flags, f);
 }
 
-CPU_State CPU_6502::get_CPU_State()
+CPU_State CPU_6502::get_CPU_state()
 {
     return {PC, SP, A, X, Y, flags};
+}
+
+inline void CPU_6502::update_zn_flags(u8 reg)
+{
+
 }
 #pragma endregion

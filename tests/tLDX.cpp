@@ -13,7 +13,7 @@ TEST_CASE("LDX flag behaviour", "[LDX]")
         emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x8F});
         emu.execute(2); // Execute 2 steps
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(cpu.get_flag(CPU_6502::N) == 1);
     }
 
@@ -22,7 +22,7 @@ TEST_CASE("LDX flag behaviour", "[LDX]")
         emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x8F, 0xA2, 0x2});
         emu.execute(4); // Execute 2 steps
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(cpu.get_flag(CPU_6502::N) == 0);
     }
 
@@ -31,7 +31,7 @@ TEST_CASE("LDX flag behaviour", "[LDX]")
         emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x0});
         emu.execute(2); // Execute 2 steps
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(cpu.get_flag(CPU_6502::Z) == 1);
     }
 
@@ -40,7 +40,7 @@ TEST_CASE("LDX flag behaviour", "[LDX]")
         emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x0, 0xA2, 0x1});
         emu.execute(4); // Execute 2 steps
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(cpu.get_flag(CPU_6502::Z) == 0);
     }
 }
@@ -56,7 +56,7 @@ TEST_CASE("LDX with IMM addressing", "[LDX][IMM]")
         emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x8F});
         emu.execute(2); // Execute 2 steps
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.X == 0x8F);
     }
 }
@@ -73,7 +73,7 @@ TEST_CASE("LDX with ZP addressing", "[LDX][ZP]")
         emu.load_bytes_at_address(0x20, std::vector<u8> {0xA5});
         emu.execute(3); 
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.X == 0xA5);
     }
 }
@@ -90,7 +90,7 @@ TEST_CASE("LDX with ZPY addressing", "[LDX][ZPY]")
         emu.load_bytes_at_address(0x21, std::vector<u8> {0xA5});
         emu.execute(5);
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.X == 0xA5);
     }
 }
@@ -111,7 +111,7 @@ TEST_CASE("LDX with ABS addressing", "[LDX][ABS]")
     {
         emu.execute(4);
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.X == 0x69);
     }
 }
@@ -128,7 +128,7 @@ TEST_CASE("LDX with ABSY addressing", "[LDX][ABSY]")
     {
         emu.execute(6);
         auto cpu = emu.get_CPU_obj();
-        auto state = cpu.get_CPU_State();
+        auto state = cpu.get_CPU_state();
         REQUIRE(state.X == 0x69);
     }
 }
