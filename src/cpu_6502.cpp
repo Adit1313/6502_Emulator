@@ -17,6 +17,8 @@ CPU_6502::CPU_6502()
     opcode_table[0xAD] = {"LDA", &CPU::LDA, &CPU::ABS, 4};
     opcode_table[0xBD] = {"LDA", &CPU::LDA, &CPU::ABSX, 4};
     opcode_table[0xB9] = {"LDA", &CPU::LDA, &CPU::ABSY, 4};
+    opcode_table[0xA1] = {"LDA", &CPU::LDA, &CPU::IZX, 6};
+    opcode_table[0xB1] = {"LDA", &CPU::LDA, &CPU::IZY, 5};
 
     opcode_table[0xA2] = {"LDX", &CPU::LDX, &CPU::IMM, 2};
     opcode_table[0xA6] = {"LDX", &CPU::LDX, &CPU::ZP, 3};
@@ -146,7 +148,7 @@ u8 CPU_6502::IZX()
 {
     u8 zp_base = read(PC++);
     zp_base = (X + zp_base)%0x100;
-    addr_abs = read(zp_base)<<8 | read(zp_base++);
+    addr_abs = read(zp_base)<<8 | read(zp_base+1);
     return 0;
 }
 
