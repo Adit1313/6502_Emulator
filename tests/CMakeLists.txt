@@ -16,7 +16,7 @@ add_executable(LDY_Tests tLDY.cpp)
 target_link_libraries(LDY_Tests PRIVATE emu_core Catch2::Catch2WithMain)
 catch_discover_tests(LDY_Tests)
 
-# ---- STA ----
+# ---- STA, STX, STY ----
 add_executable(Store_Tests tStore.cpp)
 target_link_libraries(Store_Tests PRIVATE emu_core Catch2::Catch2WithMain)
 catch_discover_tests(Store_Tests)

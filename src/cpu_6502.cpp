@@ -197,16 +197,8 @@ u8 CPU_6502::LDA()
 {
     fetch_mem();
     A = mem_data;
-    if (A == 0)
-        SET_BIT(flags, Z);
-    else
-        CLEAR_BIT(flags, Z);
 
-    if (GET_BIT(A, 7))
-        SET_BIT(flags, N);
-    else
-        CLEAR_BIT(flags, N);
-
+    update_zn_flags(A);
     return 0;
 }
 
@@ -214,16 +206,7 @@ u8 CPU_6502::LDX()
 {
     fetch_mem();
     X = mem_data;
-    if (X == 0)
-        SET_BIT(flags, Z);
-    else
-        CLEAR_BIT(flags, Z);
-
-    if (GET_BIT(X, 7))
-        SET_BIT(flags, N);
-    else
-        CLEAR_BIT(flags, N);
-
+    update_zn_flags(X);
     return 0;
 }
 
@@ -231,16 +214,7 @@ u8 CPU_6502::LDY()
 {
     fetch_mem();
     Y = mem_data;
-    if (Y == 0)
-        SET_BIT(flags, Z);
-    else
-        CLEAR_BIT(flags, Z);
-
-    if (GET_BIT(Y, 7))
-        SET_BIT(flags, N);
-    else
-        CLEAR_BIT(flags, N);
-
+    update_zn_flags(Y);
     return 0;
 }
 
@@ -265,60 +239,28 @@ u8 CPU_6502::STY()
 u8 CPU_6502::TAX()
 {
     X = A;
-    if (X == 0)
-        SET_BIT(flags, Z);
-    else
-        CLEAR_BIT(flags, Z);
-
-    if (GET_BIT(X, 7))
-        SET_BIT(flags, N);
-    else
-        CLEAR_BIT(flags, N);
+    update_zn_flags(X);
     return 0;
 }
 
 u8 CPU_6502::TAY()
 {
     Y = A;
-    if (Y == 0)
-        SET_BIT(flags, Z);
-    else
-        CLEAR_BIT(flags, Z);
-
-    if (GET_BIT(Y, 7))
-        SET_BIT(flags, N);
-    else
-        CLEAR_BIT(flags, N);
+    update_zn_flags(Y);
     return 0;
 }
 
 u8 CPU_6502::TXA()
 {
     A = X;
-    if (A == 0)
-        SET_BIT(flags, Z);
-    else
-        CLEAR_BIT(flags, Z);
-
-    if (GET_BIT(A, 7))
-        SET_BIT(flags, N);
-    else
-        CLEAR_BIT(flags, N);
+    update_zn_flags(A);
     return 0;
 }
 
 u8 CPU_6502::TYA()
 {
     A = Y;
-    if (A == 0)
-        SET_BIT(flags, Z);
-    else
-        CLEAR_BIT(flags, Z);
-
-    if (GET_BIT(A, 7))
-        SET_BIT(flags, N);
-    else
-        CLEAR_BIT(flags, N);
+    update_zn_flags(A);
     return 0;
 }
 
@@ -354,6 +296,14 @@ CPU_State CPU_6502::get_CPU_state()
 
 inline void CPU_6502::update_zn_flags(u8 reg)
 {
+    if (reg == 0)
+        SET_BIT(flags, Z);
+    else
+        CLEAR_BIT(flags, Z);
 
+    if (GET_BIT(reg, 7))
+        SET_BIT(flags, N);
+    else
+        CLEAR_BIT(flags, N);
 }
 #pragma endregion
