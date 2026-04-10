@@ -130,9 +130,7 @@ u8 CPU_6502::ABSX()
     base = (base << 8) | read(PC++);
     addr_abs = base + X;
 
-    if ((addr_abs && 0xFF00) != (base && 0xFF00))
-        return 1;
-    return 0;
+    return (addr_abs & 0xFF00) != (base & 0xFF00);
 }
 
 u8 CPU_6502::ABSY()
@@ -141,9 +139,23 @@ u8 CPU_6502::ABSY()
     base = (base << 8) | read(PC++);
     addr_abs = base + Y;
 
-    if ((addr_abs && 0xFF00) != (base && 0xFF00))
-        return 1;
+    return (addr_abs & 0xFF00) != (base & 0xFF00);
+}
+
+u8 CPU_6502::IZX()
+{
+    u8 zp_base = read(PC++);
+    zp_base = (X + zp_base)%0x100;
+    addr_abs = read(zp_base)<<8 | read(zp_base++);
     return 0;
+}
+
+u8 CPU_6502::IZY()
+{
+    u8 zp_base = read(PC++);
+    u16 base = read(zp_base) << 8 | read(zp_base+1);
+    addr_abs = base + Y;
+    return (addr_abs & 0xFF00) != (base & 0xFF00);
 }
 #pragma endregion
 
@@ -162,6 +174,7 @@ u8 CPU_6502::LDA()
         SET_BIT(flags, N);
     else
         CLEAR_BIT(flags, N);
+
     return 0;
 }
 
@@ -171,10 +184,14 @@ u8 CPU_6502::LDX()
     X = mem_data;
     if (X == 0)
         SET_BIT(flags, Z);
+    else
+        CLEAR_BIT(flags, Z);
+
     if (GET_BIT(X, 7))
         SET_BIT(flags, N);
     else
         CLEAR_BIT(flags, N);
+
     return 0;
 }
 
@@ -184,10 +201,14 @@ u8 CPU_6502::LDY()
     Y = mem_data;
     if (Y == 0)
         SET_BIT(flags, Z);
+    else
+        CLEAR_BIT(flags, Z);
+
     if (GET_BIT(Y, 7))
         SET_BIT(flags, N);
     else
         CLEAR_BIT(flags, N);
+
     return 0;
 }
 

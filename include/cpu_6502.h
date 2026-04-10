@@ -105,6 +105,8 @@ class CPU_6502 {
         u8 ABS();
         u8 ABSX();
         u8 ABSY();
+        u8 IZX();
+        u8 IZY();
 
         // Helper Functions
         void fetch_mem();
