@@ -309,6 +309,46 @@ u8 CPU_6502::PLP()
     return 0;
 }
 
+u8 CPU_6502::AND()
+{
+    fetch_mem();
+    A = A & mem_data;
+    return 0;
+}
+
+u8 CPU_6502::EOR()
+{
+    fetch_mem();
+    A = A ^ mem_data;
+    return 0;
+}
+
+u8 CPU_6502::ORA()
+{
+    fetch_mem();
+    A = A | mem_data;
+    return 0;
+}
+
+u8 CPU_6502::BIT()
+{
+    fetch_mem();
+
+    if (!A&mem_data)
+        SET_BIT(flags, Z);
+
+    if (0x40 & mem_data)
+        SET_BIT(flags, V);
+    else
+        CLEAR_BIT(flags, Y);
+
+    if (0x90 & mem_data)
+        SET_BIT(flags, N);
+    else
+        CLEAR_BIT(flags, N);
+    return 0;
+}
+
 u8 CPU_6502::XXX()
 {
     return 0; // idk what to do here
