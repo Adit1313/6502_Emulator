@@ -62,7 +62,35 @@ CPU_6502::CPU_6502()
     opcode_table[0x68] = {"PLA", &CPU::PLA, &CPU::IMP, 4};
     opcode_table[0x28] = {"PLP", &CPU::PLP, &CPU::IMP, 4};
 
+    opcode_table[0x29] = {"AND", &CPU::AND, &CPU::IMM, 2};
+    opcode_table[0x25] = {"AND", &CPU::AND, &CPU::ZP, 3};
+    opcode_table[0x35] = {"AND", &CPU::AND, &CPU::ZPX, 4};
+    opcode_table[0x2D] = {"AND", &CPU::AND, &CPU::ABS, 4};
+    opcode_table[0x3D] = {"AND", &CPU::AND, &CPU::ABSX, 4};
+    opcode_table[0x39] = {"AND", &CPU::AND, &CPU::ABSY, 4};
+    opcode_table[0x21] = {"AND", &CPU::AND, &CPU::IZX, 6};
+    opcode_table[0x31] = {"AND", &CPU::AND, &CPU::IZY, 5};
 
+    opcode_table[0x49] = {"EOR", &CPU::EOR, &CPU::IMM, 2};
+    opcode_table[0x45] = {"EOR", &CPU::EOR, &CPU::ZP, 3};
+    opcode_table[0x55] = {"EOR", &CPU::EOR, &CPU::ZPX, 4};
+    opcode_table[0x4D] = {"EOR", &CPU::EOR, &CPU::ABS, 4};
+    opcode_table[0x5D] = {"EOR", &CPU::EOR, &CPU::ABSX, 4};
+    opcode_table[0x59] = {"EOR", &CPU::EOR, &CPU::ABSY, 4};
+    opcode_table[0x41] = {"EOR", &CPU::EOR, &CPU::IZX, 6};
+    opcode_table[0x51] = {"EOR", &CPU::EOR, &CPU::IZY, 5};
+
+    opcode_table[0x09] = {"ORA", &CPU::ORA, &CPU::IMM, 2};
+    opcode_table[0x05] = {"ORA", &CPU::ORA, &CPU::ZP, 3};
+    opcode_table[0x15] = {"ORA", &CPU::ORA, &CPU::ZPX, 4};
+    opcode_table[0x0D] = {"ORA", &CPU::ORA, &CPU::ABS, 4};
+    opcode_table[0x1D] = {"ORA", &CPU::ORA, &CPU::ABSX, 4};
+    opcode_table[0x19] = {"ORA", &CPU::ORA, &CPU::ABSY, 4};
+    opcode_table[0x01] = {"ORA", &CPU::ORA, &CPU::IZX, 6};
+    opcode_table[0x11] = {"ORA", &CPU::ORA, &CPU::IZY, 5};
+
+    opcode_table[0x24] = {"BIT", &CPU::BIT, &CPU::ZP, 3};
+    opcode_table[0x2C] = {"BIT", &CPU::BIT, &CPU::ABS, 4};
     #pragma endregion
 
     addr_abs = 0;
@@ -313,6 +341,7 @@ u8 CPU_6502::AND()
 {
     fetch_mem();
     A = A & mem_data;
+    update_zn_flags(A);
     return 0;
 }
 
@@ -320,6 +349,7 @@ u8 CPU_6502::EOR()
 {
     fetch_mem();
     A = A ^ mem_data;
+    update_zn_flags(A);
     return 0;
 }
 
@@ -327,6 +357,7 @@ u8 CPU_6502::ORA()
 {
     fetch_mem();
     A = A | mem_data;
+    update_zn_flags(A);
     return 0;
 }
 
@@ -334,18 +365,70 @@ u8 CPU_6502::BIT()
 {
     fetch_mem();
 
-    if (!A&mem_data)
+    if (!(A&mem_data))
         SET_BIT(flags, Z);
+    else
+        CLEAR_BIT(flags, Z);
 
-    if (0x40 & mem_data)
+    if (GET_BIT(mem_data, 6))
         SET_BIT(flags, V);
     else
-        CLEAR_BIT(flags, Y);
+        CLEAR_BIT(flags, V);
 
-    if (0x90 & mem_data)
+    if (GET_BIT(mem_data, 7))
         SET_BIT(flags, N);
     else
         CLEAR_BIT(flags, N);
+    
+    return 0;
+}
+
+u8 CPU_6502::ADC()
+{
+    fetch_mem();
+    u16 sum = (u16)A + (u16)mem_data + (u16)GET_BIT(flags, C);
+
+    // Carry flag
+    if (sum > 0xFF)
+        SET_BIT(flags, C);
+    else
+        CLEAR_BIT(flags, C);
+
+    u8 result = sum & 0xFF;
+
+    // Overflow flag
+    if ((~(A ^ mem_data) & (A ^ result)) & 0x80)
+        SET_BIT(flags, V);
+    else
+        CLEAR_BIT(flags, V);
+
+    A = result;
+    update_zn_flags(A);
+    return 0;
+}
+
+u8 CPU_6502::SBC()
+{
+    fetch_mem();
+    u8 value = mem_data ^ 0xFF;
+    u16 sum = (u16)A + (u16)value + (u16)GET_BIT(flags, C);
+
+    // Carry flag (same logic as ADC)
+    if (sum > 0xFF)
+        SET_BIT(flags, C);
+    else
+        CLEAR_BIT(flags, C);
+
+    u8 result = sum & 0xFF;
+
+    // Overflow flag
+    if ((~(A ^ value) & (A ^ result)) & 0x80)
+        SET_BIT(flags, V);
+    else
+        CLEAR_BIT(flags, V);
+
+    A = result;
+    update_zn_flags(A);
     return 0;
 }
 

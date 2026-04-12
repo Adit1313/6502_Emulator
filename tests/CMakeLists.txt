@@ -16,6 +16,11 @@ add_executable(LDY_Tests tLDY.cpp)
 target_link_libraries(LDY_Tests PRIVATE emu_core Catch2::Catch2WithMain)
 catch_discover_tests(LDY_Tests)
 
+# ---- AND, BIT, EOR, ORA ----
+add_executable(Logical_Tests tLogical.cpp)
+target_link_libraries(Logical_Tests PRIVATE emu_core Catch2::Catch2WithMain)
+catch_discover_tests(Logical_Tests)
+
 # ---- TSX, TXS, PHA, PHP, PLA, PLP ----
 add_executable(Stack_Tests tStack.cpp)
 target_link_libraries(Stack_Tests PRIVATE emu_core Catch2::Catch2WithMain)

@@ -120,6 +120,13 @@ class CPU_6502 {
         u8 ORA();
         u8 BIT();
 
+        // Arithmetic
+        u8 ADC();
+        u8 SBC();
+        u8 CMP();
+        u8 CPX();
+        u8 CPY();
+
         // Illegal Opcode
         u8 XXX();
 
