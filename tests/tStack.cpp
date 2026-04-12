@@ -5,7 +5,7 @@
 TEST_CASE("TSX tests","[TSX][IMP]")
 {
     Emulator emu;
-    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset.
+    emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset.
     emu.load_bytes_at_address(0x200, std::vector<u8> {0xBA});
     /*
     Test does the following:
@@ -27,7 +27,7 @@ TEST_CASE("TSX tests","[TSX][IMP]")
 TEST_CASE("TXS tests","[TXS][IMP]")
 {
     Emulator emu;
-    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset.
+    emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset.
     emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0xFE, 0x9A});
     emu.reset(emu.RST_CPU);
     emu.execute(4);
@@ -39,8 +39,8 @@ TEST_CASE("TXS tests","[TXS][IMP]")
 TEST_CASE("PHA tests","[PHA][IMP]")
 {
     Emulator emu;
-    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset.
-    emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x23, 0x48, 0xAC, 0x01, 0xFD});
+    emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset.
+    emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x23, 0x48, 0xAC, 0xFD, 0x01});
     emu.reset(emu.RST_CPU);
     emu.execute(8);
     auto cpu = emu.get_CPU_obj();
@@ -53,8 +53,8 @@ TEST_CASE("PHA tests","[PHA][IMP]")
 TEST_CASE("PHP tests","[PHP][IMP]")
 {
     Emulator emu;
-    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset.
-    emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x8F, 0x08, 0xAC, 0x01, 0xFD});
+    emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset.
+    emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x8F, 0x08, 0xAC, 0xFD, 0x01});
     emu.reset(emu.RST_CPU);
     emu.execute(8);
     auto cpu = emu.get_CPU_obj();
@@ -67,7 +67,7 @@ TEST_CASE("PHP tests","[PHP][IMP]")
 TEST_CASE("PLA tests","[PLA][IMP]")
 {
     Emulator emu;
-    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset.
+    emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset.
     emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x23, 0x48, 0xA9, 0x21, 0x48, 0x68, 0x68});
     emu.reset(emu.RST_CPU);
     emu.execute(18);
@@ -81,7 +81,7 @@ TEST_CASE("PLA tests","[PLA][IMP]")
 TEST_CASE("PLP tests","[PLP][IMP]")
 {
     Emulator emu;
-    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset.
+    emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset.
     emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x8F, 0x08, 0xA2, 0x0, 0x08, 0xA2, 0x1, 0x28, 0x28});
     emu.reset(emu.RST_CPU);
     emu.execute(16);

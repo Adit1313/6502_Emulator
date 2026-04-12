@@ -1,20 +1,10 @@
 include(CTest)
 include(Catch)
 
-# ---- LDA ----
-add_executable(LDA_Tests tLDA.cpp)
-target_link_libraries(LDA_Tests PRIVATE emu_core Catch2::Catch2WithMain)
-catch_discover_tests(LDA_Tests)
-
-# ---- LDX ----
-add_executable(LDX_Tests tLDX.cpp)
-target_link_libraries(LDX_Tests PRIVATE emu_core Catch2::Catch2WithMain)
-catch_discover_tests(LDX_Tests)
-
-# ---- LDY ----
-add_executable(LDY_Tests tLDY.cpp)
-target_link_libraries(LDY_Tests PRIVATE emu_core Catch2::Catch2WithMain)
-catch_discover_tests(LDY_Tests)
+# ---- LDA, LDX, LDY ----
+add_executable(Load_Tests tLoad.cpp)
+target_link_libraries(Load_Tests PRIVATE emu_core Catch2::Catch2WithMain)
+catch_discover_tests(Load_Tests)
 
 # ---- AND, BIT, EOR, ORA ----
 add_executable(Logical_Tests tLogical.cpp)
@@ -35,3 +25,8 @@ catch_discover_tests(Store_Tests)
 add_executable(Transfer_Tests tTransfer.cpp)
 target_link_libraries(Transfer_Tests PRIVATE emu_core Catch2::Catch2WithMain)
 catch_discover_tests(Transfer_Tests)
+
+# ---- ADC, SBC, CMP, CPX, CPY ----
+add_executable(Arithmetic_Tests tArithmetic.cpp)
+target_link_libraries(Arithmetic_Tests PRIVATE emu_core Catch2::Catch2WithMain)
+catch_discover_tests(Arithmetic_Tests)

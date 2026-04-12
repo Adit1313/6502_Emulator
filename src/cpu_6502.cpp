@@ -222,14 +222,14 @@ u8 CPU_6502::ZPY()
 u8 CPU_6502::ABS()
 {
     addr_abs = read(PC++);
-    addr_abs = (addr_abs << 8) | read(PC++);
+    addr_abs |= read(PC++) << 8;
     return 0;
 }
 
 u8 CPU_6502::ABSX()
 {
     u16 base = read(PC++);
-    base = (base << 8) | read(PC++);
+    base |=  read(PC++) << 8;
     addr_abs = base + X;
 
     return (addr_abs & 0xFF00) != (base & 0xFF00);
@@ -238,7 +238,7 @@ u8 CPU_6502::ABSX()
 u8 CPU_6502::ABSY()
 {
     u16 base = read(PC++);
-    base = (base << 8) | read(PC++);
+    base |= read(PC++) << 8;
     addr_abs = base + Y;
 
     return (addr_abs & 0xFF00) != (base & 0xFF00);
@@ -248,14 +248,14 @@ u8 CPU_6502::IZX()
 {
     u8 zp_base = read(PC++);
     zp_base = (X + zp_base)%0x100;
-    addr_abs = read(zp_base)<<8 | read(zp_base+1);
+    addr_abs = read(zp_base) | read(zp_base+1) << 8;
     return 0;
 }
 
 u8 CPU_6502::IZY()
 {
     u8 zp_base = read(PC++);
-    u16 base = read(zp_base) << 8 | read(zp_base+1);
+    u16 base = read(zp_base) | read(zp_base+1) << 8;
     addr_abs = base + Y;
     return (addr_abs & 0xFF00) != (base & 0xFF00);
 }

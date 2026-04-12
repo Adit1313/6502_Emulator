@@ -5,7 +5,7 @@
 TEST_CASE("TAX tests", "[Transfer][TXA][IMP]")
 {
     Emulator emu;
-    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset. PC breaks without this
+    emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset. PC breaks without this
     emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x8F, 0xAA});
     emu.reset(emu.RST_CPU);
     
@@ -57,7 +57,7 @@ TEST_CASE("TAX tests", "[Transfer][TXA][IMP]")
 TEST_CASE("TAY tests", "[Transfer][TYA][IMP]")
 {
     Emulator emu;
-    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset. PC breaks without this
+    emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset. PC breaks without this
     emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x8F, 0xA8});
     emu.reset(emu.RST_CPU);
     
@@ -109,7 +109,7 @@ TEST_CASE("TAY tests", "[Transfer][TYA][IMP]")
 TEST_CASE("TXA tests", "[Transfer][TXA][IMP]")
 {
     Emulator emu;
-    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset. PC breaks without this
+    emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset. PC breaks without this
     emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x8F, 0x8A});
     emu.reset(emu.RST_CPU);
     
@@ -161,7 +161,7 @@ TEST_CASE("TXA tests", "[Transfer][TXA][IMP]")
 TEST_CASE("TYA tests", "[Transfer][TYA][IMP]")
 {
     Emulator emu;
-    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset. PC breaks without this
+    emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset. PC breaks without this
     emu.load_bytes_at_address(0x200, std::vector<u8> {0xA0, 0x8F, 0x98});
     emu.reset(emu.RST_CPU);
     

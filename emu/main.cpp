@@ -5,7 +5,7 @@
 int main(int argc, char** argv)
 {
     Emulator emu;
-    emu.load_bytes_at_address(0xFFFD, std::vector<u8> {0x2, 0x0}); // Tells the CPU where to go after reset.
+    emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset.
     emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x8F, 0x08, 0xA2, 0x0, 0x08, 0xA2, 0x1, 0x28, 0x28, 0x28});
     emu.reset(emu.RST_CPU);
     emu.load_bytes_at_address(0x10, std::vector<u8> {0x0});
