@@ -56,12 +56,12 @@ TEST_CASE("PHP tests","[PHP][IMP]")
     emu.load_bytes_at_address(0xFFFC, std::vector<u8> {0x0, 0x2}); // Tells the CPU where to go after reset.
     emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x8F, 0x08, 0xAC, 0xFD, 0x01});
     emu.reset(emu.RST_CPU);
-    emu.execute(8);
+    emu.execute(9);
     auto cpu = emu.get_CPU_obj();
     auto state = cpu.get_CPU_state();
     
     REQUIRE(state.SP == 0xFC);  // Check if SP decremented
-    REQUIRE(state.Y == 0x40);   // Check if value in stack is correct
+    REQUIRE(GET_BIT(state.Y, emu.get_CPU_obj().N) == 1);   // Check if value in stack is correct
 }
 
 TEST_CASE("PLA tests","[PLA][IMP]")

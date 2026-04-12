@@ -30,3 +30,8 @@ catch_discover_tests(Transfer_Tests)
 add_executable(Arithmetic_Tests tArithmetic.cpp)
 target_link_libraries(Arithmetic_Tests PRIVATE emu_core Catch2::Catch2WithMain)
 catch_discover_tests(Arithmetic_Tests)
+
+# ---- SEC ----
+add_executable(Status_Flag_Tests tStatusFlags.cpp)
+target_link_libraries(Status_Flag_Tests PRIVATE emu_core Catch2::Catch2WithMain)
+catch_discover_tests(Status_Flag_Tests)

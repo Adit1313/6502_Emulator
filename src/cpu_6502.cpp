@@ -125,6 +125,8 @@ CPU_6502::CPU_6502()
     opcode_table[0xC0] = {"CPY", &CPU_6502::CPY, &CPU_6502::IMM, 2};
     opcode_table[0xC4] = {"CPY", &CPU_6502::CPY, &CPU_6502::ZP, 3};
     opcode_table[0xCC] = {"CPY", &CPU_6502::CPY, &CPU_6502::ABS, 4};
+
+    opcode_table[0x38] = {"SEC", &CPU_6502::SEC, &CPU_6502::IMP, 2};
     #pragma endregion
 
     addr_abs = 0;
@@ -167,9 +169,16 @@ void CPU_6502::reset()
     // Standard cold start routine
     // set_flag(I, false); Do I need this?
     SP = STACK_POINTER_INIT;
-    u16 low = read(0xFFFC);
-    u16 high = read(0xFFFD);
+    u16 low = read(RESET_VECTOR);
+    u16 high = read(RESET_VECTOR + 1);
     PC = (high << 8) | low;
+
+    addr_abs = 0;
+    addr_rel = 0;
+    mem_data = 0;
+
+    flags = 0x0 | (1 << FLAGS::U);
+
     current_cycles = 0;
 }
 
@@ -444,10 +453,11 @@ u8 CPU_6502::ADC()
 u8 CPU_6502::SBC()
 {
     fetch_mem();
+
     u8 value = mem_data ^ 0xFF;
     u16 sum = (u16)A + (u16)value + (u16)GET_BIT(flags, C);
 
-    // Carry flag (same logic as ADC)
+    // Carry flag (no borrow)
     if (sum > 0xFF)
         SET_BIT(flags, C);
     else
@@ -455,14 +465,15 @@ u8 CPU_6502::SBC()
 
     u8 result = sum & 0xFF;
 
-    // Overflow flag
-    if ((~(A ^ value) & (A ^ result)) & 0x80)
+    // Overflow flag (must use original mem_data)
+    if (((A ^ result) & (A ^ mem_data) & 0x80))
         SET_BIT(flags, V);
     else
         CLEAR_BIT(flags, V);
 
     A = result;
     update_zn_flags(A);
+
     return 0;
 }
 
@@ -512,6 +523,12 @@ u8 CPU_6502::CPY()
 
     update_zn_flags((u8)temp);
 
+    return 0;
+}
+
+u8 CPU_6502::SEC()
+{
+    SET_BIT(flags, C);
     return 0;
 }
 

@@ -49,8 +49,9 @@ class CPU_6502 {
             I = 2, // Interrupt Disable - While this flag is set the processor will not respond to interrupts from devices until it is cleared.
             D = 3, // Decimal Mode - While the decimal mode flag is set the processor will obey the rules of Binary Coded Decimal (BCD) arithmetic during addition and subtraction.
             B = 4, // Break Command - The break command bit is set when a BRK instruction has been executed and an interrupt has been generated to process it.
-            V = 5, // Overflow Flag - The overflow flag is set during arithmetic operations if the result has yielded an invalid 2's complement result.
-            N = 6  // Negative Flag - The negative flag is set if the result of the last operation had bit 7 set to a one.
+            U = 5, // Unused
+            V = 6, // Overflow Flag - The overflow flag is set during arithmetic operations if the result has yielded an invalid 2's complement result.
+            N = 7  // Negative Flag - The negative flag is set if the result of the last operation had bit 7 set to a one.
         };
 
         void clock();
@@ -126,6 +127,9 @@ class CPU_6502 {
         u8 CMP();
         u8 CPX();
         u8 CPY();
+
+        // Status Flag Changes
+        u8 SEC();
 
         // Illegal Opcode
         u8 XXX();
