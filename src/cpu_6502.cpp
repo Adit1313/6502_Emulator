@@ -12,7 +12,6 @@ CPU_6502::CPU_6502()
     }
     
     #pragma region Opcode Definition
-
     opcode_table[0xA9] = {"LDA", &CPU::LDA, &CPU::IMM, 2};
     opcode_table[0xA5] = {"LDA", &CPU::LDA, &CPU::ZP, 3};
     opcode_table[0xB5] = {"LDA", &CPU::LDA, &CPU::ZPX, 4};
@@ -91,6 +90,24 @@ CPU_6502::CPU_6502()
 
     opcode_table[0x24] = {"BIT", &CPU::BIT, &CPU::ZP, 3};
     opcode_table[0x2C] = {"BIT", &CPU::BIT, &CPU::ABS, 4};
+
+    opcode_table[0x69] = {"ADC", &CPU_6502::ADC, &CPU_6502::IMM, 2};
+    opcode_table[0x65] = {"ADC", &CPU_6502::ADC, &CPU_6502::ZP, 3};
+    opcode_table[0x75] = {"ADC", &CPU_6502::ADC, &CPU_6502::ZPX, 4};
+    opcode_table[0x6D] = {"ADC", &CPU_6502::ADC, &CPU_6502::ABS, 4};
+    opcode_table[0x7D] = {"ADC", &CPU_6502::ADC, &CPU_6502::ABSX, 4};
+    opcode_table[0x79] = {"ADC", &CPU_6502::ADC, &CPU_6502::ABSY, 4};
+    opcode_table[0x61] = {"ADC", &CPU_6502::ADC, &CPU_6502::IZX, 6};
+    opcode_table[0x71] = {"ADC", &CPU_6502::ADC, &CPU_6502::IZY, 5};
+
+    opcode_table[0xE9] = {"SBC", &CPU_6502::SBC, &CPU_6502::IMM, 2};
+    opcode_table[0xE5] = {"SBC", &CPU_6502::SBC, &CPU_6502::ZP, 3};
+    opcode_table[0xF5] = {"SBC", &CPU_6502::SBC, &CPU_6502::ZPX, 4};
+    opcode_table[0xED] = {"SBC", &CPU_6502::SBC, &CPU_6502::ABS, 4};
+    opcode_table[0xFD] = {"SBC", &CPU_6502::SBC, &CPU_6502::ABSX, 4};
+    opcode_table[0xF9] = {"SBC", &CPU_6502::SBC, &CPU_6502::ABSY, 4};
+    opcode_table[0xE1] = {"SBC", &CPU_6502::SBC, &CPU_6502::IZX, 6};
+    opcode_table[0xF1] = {"SBC", &CPU_6502::SBC, &CPU_6502::IZY, 5};
     #pragma endregion
 
     addr_abs = 0;
