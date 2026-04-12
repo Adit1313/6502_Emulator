@@ -126,6 +126,22 @@ CPU_6502::CPU_6502()
     opcode_table[0xC4] = {"CPY", &CPU_6502::CPY, &CPU_6502::ZP, 3};
     opcode_table[0xCC] = {"CPY", &CPU_6502::CPY, &CPU_6502::ABS, 4};
 
+    opcode_table[0xE6] = {"INC", &CPU_6502::INC, &CPU_6502::ZP,   5};
+    opcode_table[0xF6] = {"INC", &CPU_6502::INC, &CPU_6502::ZPX,  6};
+    opcode_table[0xEE] = {"INC", &CPU_6502::INC, &CPU_6502::ABS,  6};
+    opcode_table[0xFE] = {"INC", &CPU_6502::INC, &CPU_6502::ABSX, 7};
+
+    opcode_table[0xE8] = {"INX", &CPU_6502::INX, &CPU_6502::IMP, 2};
+    opcode_table[0xC8] = {"INY", &CPU_6502::INY, &CPU_6502::IMP, 2};
+
+    opcode_table[0xC6] = {"DEC", &CPU_6502::DEC, &CPU_6502::ZP,   5};
+    opcode_table[0xD6] = {"DEC", &CPU_6502::DEC, &CPU_6502::ZPX,  6};
+    opcode_table[0xCE] = {"DEC", &CPU_6502::DEC, &CPU_6502::ABS,  6};
+    opcode_table[0xDE] = {"DEC", &CPU_6502::DEC, &CPU_6502::ABSX, 7};
+
+    opcode_table[0xCA] = {"DEX", &CPU_6502::DEX, &CPU_6502::IMP, 2};
+    opcode_table[0x88] = {"DEY", &CPU_6502::DEY, &CPU_6502::IMP, 2};
+
     opcode_table[0x38] = {"SEC", &CPU_6502::SEC, &CPU_6502::IMP, 2};
     #pragma endregion
 
@@ -526,10 +542,55 @@ u8 CPU_6502::CPY()
     return 0;
 }
 
+u8 CPU_6502::INC()
+{
+    fetch_mem();
+    u8 value = mem_data + 1;
+    write(addr_abs, value);
+    update_zn_flags(value);
+    return 0;
+}
+
+u8 CPU_6502::INX()
+{
+    X++;
+    update_zn_flags(X);
+    return 0;
+}
+
+u8 CPU_6502::INY()
+{
+    Y++;
+    update_zn_flags(Y);
+    return 0;
+}
+
+u8 CPU_6502::DEC()
+{
+    fetch_mem();
+    u8 value = mem_data - 1;
+    write(addr_abs, value);
+    update_zn_flags(value);
+    return 0;
+}
+
+u8 CPU_6502::DEX()
+{
+    X--;
+    update_zn_flags(X);
+    return 0;
+}
+
+u8 CPU_6502::DEY()
+{
+    Y--;
+    update_zn_flags(Y);
+    return 0;
+}
+
 u8 CPU_6502::SEC()
 {
     SET_BIT(flags, C);
-    return 0;
 }
 
 u8 CPU_6502::XXX()

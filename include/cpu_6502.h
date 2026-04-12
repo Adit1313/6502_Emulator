@@ -128,6 +128,14 @@ class CPU_6502 {
         u8 CPX();
         u8 CPY();
 
+        // Increments and Decrements
+        u8 INC();
+        u8 INX();
+        u8 INY();
+        u8 DEC();
+        u8 DEX();
+        u8 DEY();
+
         // Status Flag Changes
         u8 SEC();
 
