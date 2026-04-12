@@ -591,6 +591,7 @@ u8 CPU_6502::DEY()
 u8 CPU_6502::SEC()
 {
     SET_BIT(flags, C);
+    return 0;
 }
 
 u8 CPU_6502::XXX()
