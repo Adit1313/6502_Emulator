@@ -108,6 +108,23 @@ CPU_6502::CPU_6502()
     opcode_table[0xF9] = {"SBC", &CPU_6502::SBC, &CPU_6502::ABSY, 4};
     opcode_table[0xE1] = {"SBC", &CPU_6502::SBC, &CPU_6502::IZX, 6};
     opcode_table[0xF1] = {"SBC", &CPU_6502::SBC, &CPU_6502::IZY, 5};
+
+    opcode_table[0xC9] = {"CMP", &CPU_6502::CMP, &CPU_6502::IMM, 2};
+    opcode_table[0xC5] = {"CMP", &CPU_6502::CMP, &CPU_6502::ZP, 3};
+    opcode_table[0xD5] = {"CMP", &CPU_6502::CMP, &CPU_6502::ZPX, 4};
+    opcode_table[0xCD] = {"CMP", &CPU_6502::CMP, &CPU_6502::ABS, 4};
+    opcode_table[0xDD] = {"CMP", &CPU_6502::CMP, &CPU_6502::ABSX, 4};
+    opcode_table[0xD9] = {"CMP", &CPU_6502::CMP, &CPU_6502::ABSY, 4};
+    opcode_table[0xC1] = {"CMP", &CPU_6502::CMP, &CPU_6502::IZX, 6};
+    opcode_table[0xD1] = {"CMP", &CPU_6502::CMP, &CPU_6502::IZY, 5};
+
+    opcode_table[0xE0] = {"CPX", &CPU_6502::CPX, &CPU_6502::IMM, 2};
+    opcode_table[0xE4] = {"CPX", &CPU_6502::CPX, &CPU_6502::ZP, 3};
+    opcode_table[0xEC] = {"CPX", &CPU_6502::CPX, &CPU_6502::ABS, 4};
+
+    opcode_table[0xC0] = {"CPY", &CPU_6502::CPY, &CPU_6502::IMM, 2};
+    opcode_table[0xC4] = {"CPY", &CPU_6502::CPY, &CPU_6502::ZP, 3};
+    opcode_table[0xCC] = {"CPY", &CPU_6502::CPY, &CPU_6502::ABS, 4};
     #pragma endregion
 
     addr_abs = 0;
@@ -446,6 +463,55 @@ u8 CPU_6502::SBC()
 
     A = result;
     update_zn_flags(A);
+    return 0;
+}
+
+u8 CPU_6502::CMP()
+{
+    fetch_mem();
+    u16 temp = (u16)A - (u16)mem_data;
+
+    // Carry flag (A >= M)
+    if (A >= mem_data)
+        SET_BIT(flags, C);
+    else
+        CLEAR_BIT(flags, C);
+
+    // Z and N from result
+    update_zn_flags((u8)temp);
+
+    return 0;
+}
+
+u8 CPU_6502::CPX()
+{
+    fetch_mem();
+
+    u16 temp = (u16)X - (u16)mem_data;
+
+    if (X >= mem_data)
+        SET_BIT(flags, C);
+    else
+        CLEAR_BIT(flags, C);
+
+    update_zn_flags((u8)temp);
+
+    return 0;
+}
+
+u8 CPU_6502::CPY()
+{
+    fetch_mem();
+
+    u16 temp = (u16)Y - (u16)mem_data;
+
+    if (Y >= mem_data)
+        SET_BIT(flags, C);
+    else
+        CLEAR_BIT(flags, C);
+
+    update_zn_flags((u8)temp);
+
     return 0;
 }
 
