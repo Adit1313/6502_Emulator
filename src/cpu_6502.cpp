@@ -133,14 +133,19 @@ CPU_6502::CPU_6502()
 
     opcode_table[0xE8] = {"INX", &CPU_6502::INX, &CPU_6502::IMP, 2};
     opcode_table[0xC8] = {"INY", &CPU_6502::INY, &CPU_6502::IMP, 2};
+    opcode_table[0xCA] = {"DEX", &CPU_6502::DEX, &CPU_6502::IMP, 2};
+    opcode_table[0x88] = {"DEY", &CPU_6502::DEY, &CPU_6502::IMP, 2};
 
     opcode_table[0xC6] = {"DEC", &CPU_6502::DEC, &CPU_6502::ZP,   5};
     opcode_table[0xD6] = {"DEC", &CPU_6502::DEC, &CPU_6502::ZPX,  6};
     opcode_table[0xCE] = {"DEC", &CPU_6502::DEC, &CPU_6502::ABS,  6};
     opcode_table[0xDE] = {"DEC", &CPU_6502::DEC, &CPU_6502::ABSX, 7};
 
-    opcode_table[0xCA] = {"DEX", &CPU_6502::DEX, &CPU_6502::IMP, 2};
-    opcode_table[0x88] = {"DEY", &CPU_6502::DEY, &CPU_6502::IMP, 2};
+    opcode_table[0x0A] = {"ASL", &CPU_6502::ASL, &CPU_6502::ACC, 2};
+    opcode_table[0x06] = {"ASL", &CPU_6502::ASL, &CPU_6502::ZP,   5};
+    opcode_table[0x16] = {"ASL", &CPU_6502::ASL, &CPU_6502::ZPX,  6};
+    opcode_table[0x0E] = {"ASL", &CPU_6502::ASL, &CPU_6502::ABS,  6};
+    opcode_table[0x1E] = {"ASL", &CPU_6502::ASL, &CPU_6502::ABSX, 7};
 
     opcode_table[0x38] = {"SEC", &CPU_6502::SEC, &CPU_6502::IMP, 2};
     #pragma endregion
