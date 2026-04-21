@@ -148,6 +148,7 @@ CPU_6502::CPU_6502()
     addr_abs = 0;
     addr_rel = 0;
     mem_data = 0;
+    read_from_acc = 0;
 }
 
 CPU_6502::~CPU_6502()
@@ -192,6 +193,7 @@ void CPU_6502::reset()
     addr_abs = 0;
     addr_rel = 0;
     mem_data = 0;
+    read_from_acc = 0;
 
     flags = 0x0 | (1 << FLAGS::U);
 
@@ -217,6 +219,12 @@ void CPU_6502::write(u16 address, u8 data)
 #pragma region Addressing Mode Definitions
 u8 CPU_6502::IMP()
 {
+    return 0;
+}
+
+u8 CPU_6502::ACC()
+{
+    read_from_acc = 1;
     return 0;
 }
 
@@ -588,6 +596,45 @@ u8 CPU_6502::DEY()
     return 0;
 }
 
+u8 CPU_6502::ASL()
+{
+    fetch_mem();
+    u8 value = mem_data;
+
+    if (value & 0x80)
+        SET_BIT(flags, C);
+    else
+        CLEAR_BIT(flags, C);
+
+    value <<= 1;
+
+    if (read_from_acc)
+    {
+        A = value;
+        read_from_acc = 0;
+    }
+    else
+        write(addr_abs, value);
+
+    update_zn_flags(value);
+    return 0;
+}
+
+u8 CPU_6502::LSL()
+{
+    return 0;
+}
+
+u8 CPU_6502::ROL()
+{
+    return 0;
+}
+
+u8 CPU_6502::ROR()
+{
+    return 0;
+}
+
 u8 CPU_6502::SEC()
 {
     SET_BIT(flags, C);
@@ -603,7 +650,12 @@ u8 CPU_6502::XXX()
 #pragma region Helper Functions
 void CPU_6502::fetch_mem()
 {
-    mem_data = read(addr_abs);
+    if(read_from_acc)
+    {
+        mem_data = A;
+    }
+    else
+        mem_data = read(addr_abs);
 }
 
 void CPU_6502::set_flag(FLAGS f, bool value)

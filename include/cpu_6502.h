@@ -81,7 +81,8 @@ class CPU_6502 {
         u16 addr_rel;       // Relative address used for branching.
         u8 mem_data;        // Variable to store fetched data for instructions.
         u8 current_cycles;  // Stores how many cycles left for current instruction execution.
-        Bus *bus_ptr;           // Pointer to a bus object to read to / write from.
+        u8 read_from_acc;
+        Bus *bus_ptr;       // Pointer to a bus object to read to / write from.
 
         // Opcode definitions
         struct Instruction {
@@ -136,6 +137,12 @@ class CPU_6502 {
         u8 DEX();
         u8 DEY();
 
+        // Shifts
+        u8 ASL();
+        u8 LSL();
+        u8 ROL();
+        u8 ROR();
+
         // Status Flag Changes
         u8 SEC();
 
@@ -144,6 +151,7 @@ class CPU_6502 {
 
         // Addressing Modes
         u8 IMP();   // Implied
+        u8 ACC();   // Accumulator
         u8 IMM();   // Immediate
         u8 ZP();    // Zero Page
         u8 ZPX();   // Zero Page, X
