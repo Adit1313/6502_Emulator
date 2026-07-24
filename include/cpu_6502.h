@@ -139,7 +139,7 @@ class CPU_6502 {
 
         // Shifts
         u8 ASL();
-        u8 LSL();
+        u8 LSR();
         u8 ROL();
         u8 ROR();
 

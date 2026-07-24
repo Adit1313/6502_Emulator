@@ -147,6 +147,24 @@ CPU_6502::CPU_6502()
     opcode_table[0x0E] = {"ASL", &CPU_6502::ASL, &CPU_6502::ABS,  6};
     opcode_table[0x1E] = {"ASL", &CPU_6502::ASL, &CPU_6502::ABSX, 7};
 
+    opcode_table[0x4A] = {"LSR", &CPU_6502::LSR, &CPU_6502::ACC, 2};
+    opcode_table[0x46] = {"LSR", &CPU_6502::LSR, &CPU_6502::ZP,   5};
+    opcode_table[0x56] = {"LSR", &CPU_6502::LSR, &CPU_6502::ZPX,  6};
+    opcode_table[0x4E] = {"LSR", &CPU_6502::LSR, &CPU_6502::ABS,  6};
+    opcode_table[0x5E] = {"LSR", &CPU_6502::LSR, &CPU_6502::ABSX, 7};
+
+    opcode_table[0x2A] = {"ROL", &CPU_6502::ROL, &CPU_6502::ACC, 2};
+    opcode_table[0x26] = {"ROL", &CPU_6502::ROL, &CPU_6502::ZP,   5};
+    opcode_table[0x36] = {"ROL", &CPU_6502::ROL, &CPU_6502::ZPX,  6};
+    opcode_table[0x2E] = {"ROL", &CPU_6502::ROL, &CPU_6502::ABS,  6};
+    opcode_table[0x3E] = {"ROL", &CPU_6502::ROL, &CPU_6502::ABSX, 7};
+
+    opcode_table[0x6A] = {"ROR", &CPU_6502::ROR, &CPU_6502::ACC, 2};
+    opcode_table[0x66] = {"ROR", &CPU_6502::ROR, &CPU_6502::ZP,   5};
+    opcode_table[0x76] = {"ROR", &CPU_6502::ROR, &CPU_6502::ZPX,  6};
+    opcode_table[0x6E] = {"ROR", &CPU_6502::ROR, &CPU_6502::ABS,  6};
+    opcode_table[0x7E] = {"ROR", &CPU_6502::ROR, &CPU_6502::ABSX, 7};
+
     opcode_table[0x38] = {"SEC", &CPU_6502::SEC, &CPU_6502::IMP, 2};
     #pragma endregion
 
@@ -625,18 +643,77 @@ u8 CPU_6502::ASL()
     return 0;
 }
 
-u8 CPU_6502::LSL()
+u8 CPU_6502::LSR()
 {
+    fetch_mem();
+    u8 value = mem_data;
+
+    if (value & 0x01)
+        SET_BIT(flags, C);
+    else
+        CLEAR_BIT(flags, C);
+
+    value >>= 1;
+
+    if (read_from_acc)
+    {
+        A = value;
+        read_from_acc = 0;
+    }
+    else
+        write(addr_abs, value);
+
+    update_zn_flags(value);
     return 0;
 }
 
 u8 CPU_6502::ROL()
 {
+    fetch_mem();
+    u8 value = mem_data;
+    u8 old_carry = GET_BIT(flags, C);
+
+    if (value & 0x80)
+        SET_BIT(flags, C);
+    else
+        CLEAR_BIT(flags, C);
+
+    value = (value << 1) | old_carry;
+
+    if (read_from_acc)
+    {
+        A = value;
+        read_from_acc = 0;
+    }
+    else
+        write(addr_abs, value);
+
+    update_zn_flags(value);
     return 0;
 }
 
 u8 CPU_6502::ROR()
 {
+    fetch_mem();
+    u8 value = mem_data;
+    u8 old_carry = GET_BIT(flags, C);
+
+    if (value & 0x01)
+        SET_BIT(flags, C);
+    else
+        CLEAR_BIT(flags, C);
+
+    value = (value >> 1) | (old_carry << 7);
+
+    if (read_from_acc)
+    {
+        A = value;
+        read_from_acc = 0;
+    }
+    else
+        write(addr_abs, value);
+
+    update_zn_flags(value);
     return 0;
 }
 

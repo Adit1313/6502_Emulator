@@ -40,3 +40,8 @@ catch_discover_tests(Inc_Dec_Tests)
 add_executable(Status_Flag_Tests tStatusFlags.cpp)
 target_link_libraries(Status_Flag_Tests PRIVATE emu_core Catch2::Catch2WithMain)
 catch_discover_tests(Status_Flag_Tests)
+
+# ---- ASL, LSR, ROL, ROR ----
+add_executable(Shift_Tests tShift.cpp)
+target_link_libraries(Shift_Tests PRIVATE emu_core Catch2::Catch2WithMain)
+catch_discover_tests(Shift_Tests)
