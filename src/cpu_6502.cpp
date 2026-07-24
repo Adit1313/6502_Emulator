@@ -165,6 +165,15 @@ CPU_6502::CPU_6502()
     opcode_table[0x6E] = {"ROR", &CPU_6502::ROR, &CPU_6502::ABS,  6};
     opcode_table[0x7E] = {"ROR", &CPU_6502::ROR, &CPU_6502::ABSX, 7};
 
+    opcode_table[0x10] = {"BPL", &CPU_6502::BPL, &CPU_6502::REL, 2};
+    opcode_table[0x30] = {"BMI", &CPU_6502::BMI, &CPU_6502::REL, 2};
+    opcode_table[0x50] = {"BVC", &CPU_6502::BVC, &CPU_6502::REL, 2};
+    opcode_table[0x70] = {"BVS", &CPU_6502::BVS, &CPU_6502::REL, 2};
+    opcode_table[0x90] = {"BCC", &CPU_6502::BCC, &CPU_6502::REL, 2};
+    opcode_table[0xB0] = {"BCS", &CPU_6502::BCS, &CPU_6502::REL, 2};
+    opcode_table[0xD0] = {"BNE", &CPU_6502::BNE, &CPU_6502::REL, 2};
+    opcode_table[0xF0] = {"BEQ", &CPU_6502::BEQ, &CPU_6502::REL, 2};
+
     opcode_table[0x38] = {"SEC", &CPU_6502::SEC, &CPU_6502::IMP, 2};
     #pragma endregion
 
@@ -314,6 +323,14 @@ u8 CPU_6502::IZY()
     u16 base = read(zp_base) | read(zp_base+1) << 8;
     addr_abs = base + Y;
     return (addr_abs & 0xFF00) != (base & 0xFF00);
+}
+
+u8 CPU_6502::REL()
+{
+    addr_rel = read(PC++);
+    if (addr_rel & 0x80)
+        addr_rel |= 0xFF00;
+    return 0;
 }
 #pragma endregion
 
@@ -717,6 +734,46 @@ u8 CPU_6502::ROR()
     return 0;
 }
 
+u8 CPU_6502::BPL()
+{
+    return branch(!get_flag(N));
+}
+
+u8 CPU_6502::BMI()
+{
+    return branch(get_flag(N));
+}
+
+u8 CPU_6502::BVC()
+{
+    return branch(!get_flag(V));
+}
+
+u8 CPU_6502::BVS()
+{
+    return branch(get_flag(V));
+}
+
+u8 CPU_6502::BCC()
+{
+    return branch(!get_flag(C));
+}
+
+u8 CPU_6502::BCS()
+{
+    return branch(get_flag(C));
+}
+
+u8 CPU_6502::BNE()
+{
+    return branch(!get_flag(Z));
+}
+
+u8 CPU_6502::BEQ()
+{
+    return branch(get_flag(Z));
+}
+
 u8 CPU_6502::SEC()
 {
     SET_BIT(flags, C);
@@ -753,7 +810,7 @@ bool CPU_6502::get_flag(FLAGS f)
     return GET_BIT(flags, f);
 }
 
-CPU_State CPU_6502::get_CPU_state()
+CPU_State CPU_6502::get_CPU_state() const
 {
     return {PC, SP, A, X, Y, flags};
 }
@@ -769,5 +826,20 @@ inline void CPU_6502::update_zn_flags(u8 reg)
         SET_BIT(flags, N);
     else
         CLEAR_BIT(flags, N);
+}
+
+u8 CPU_6502::branch(bool condition)
+{
+    if (!condition)
+        return 0;
+
+    u8 extra_cycles = 1;
+    addr_abs = PC + addr_rel;
+
+    if ((addr_abs & 0xFF00) != (PC & 0xFF00))
+        extra_cycles++;
+
+    PC = addr_abs;
+    return extra_cycles;
 }
 #pragma endregion

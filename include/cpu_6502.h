@@ -65,7 +65,7 @@ class CPU_6502 {
         // Helper Functions
         void set_flag(FLAGS f, bool value);
         bool get_flag(FLAGS f);
-        CPU_State get_CPU_state();
+        CPU_State get_CPU_state() const;
         
     private:
         // Registers
@@ -143,6 +143,16 @@ class CPU_6502 {
         u8 ROL();
         u8 ROR();
 
+        // Branches
+        u8 BCC();   // Branch if carry flag clear
+        u8 BCS();   // Branch if carry flag set
+        u8 BEQ();   // Branch if zero flag set
+        u8 BMI();   // Branch if negative flag set
+        u8 BNE();   // Branch if zero flag clear
+        u8 BPL();   // Branch if negative flag clear
+        u8 BVC();   // Branch if overflow flag clear
+        u8 BVS();   // Branch if overflow flag set
+
         // Status Flag Changes
         u8 SEC();
 
@@ -161,8 +171,10 @@ class CPU_6502 {
         u8 ABSY();  // Absolute, Y
         u8 IZX();   // Indexed Indirect
         u8 IZY();   // Indirect Indexed
+        u8 REL();   // Relative (branches)
 
         // Helper Functions
         void fetch_mem();
         inline void update_zn_flags(u8 reg);
+        u8 branch(bool condition);
 };

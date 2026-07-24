@@ -45,3 +45,8 @@ catch_discover_tests(Status_Flag_Tests)
 add_executable(Shift_Tests tShift.cpp)
 target_link_libraries(Shift_Tests PRIVATE emu_core Catch2::Catch2WithMain)
 catch_discover_tests(Shift_Tests)
+
+# ---- BCC, BCS, BEQ, BMI, BNE, BPL, BVC, BVS ----
+add_executable(Branch_Tests tBranch.cpp)
+target_link_libraries(Branch_Tests PRIVATE emu_core Catch2::Catch2WithMain)
+catch_discover_tests(Branch_Tests)
