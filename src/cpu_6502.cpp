@@ -174,7 +174,13 @@ CPU_6502::CPU_6502()
     opcode_table[0xD0] = {"BNE", &CPU_6502::BNE, &CPU_6502::REL, 2};
     opcode_table[0xF0] = {"BEQ", &CPU_6502::BEQ, &CPU_6502::REL, 2};
 
+    opcode_table[0x18] = {"CLC", &CPU_6502::CLC, &CPU_6502::IMP, 2};
+    opcode_table[0xD8] = {"CLD", &CPU_6502::CLD, &CPU_6502::IMP, 2};
+    opcode_table[0x58] = {"CLI", &CPU_6502::CLI, &CPU_6502::IMP, 2};
+    opcode_table[0xB8] = {"CLV", &CPU_6502::CLV, &CPU_6502::IMP, 2};
     opcode_table[0x38] = {"SEC", &CPU_6502::SEC, &CPU_6502::IMP, 2};
+    opcode_table[0xF8] = {"SED", &CPU_6502::SED, &CPU_6502::IMP, 2};
+    opcode_table[0x78] = {"SEI", &CPU_6502::SEI, &CPU_6502::IMP, 2};
     #pragma endregion
 
     addr_abs = 0;
@@ -774,9 +780,45 @@ u8 CPU_6502::BEQ()
     return branch(get_flag(Z));
 }
 
+u8 CPU_6502::CLC()
+{
+    CLEAR_BIT(flags, C);
+    return 0;
+}
+
+u8 CPU_6502::CLD()
+{
+    CLEAR_BIT(flags, D);
+    return 0;
+}
+
+u8 CPU_6502::CLI()
+{
+    CLEAR_BIT(flags, I);
+    return 0;
+}
+
+u8 CPU_6502::CLV()
+{
+    CLEAR_BIT(flags, V);
+    return 0;
+}
+
 u8 CPU_6502::SEC()
 {
     SET_BIT(flags, C);
+    return 0;
+}
+
+u8 CPU_6502::SED()
+{
+    SET_BIT(flags, D);
+    return 0;
+}
+
+u8 CPU_6502::SEI()
+{
+    SET_BIT(flags, I);
     return 0;
 }
 

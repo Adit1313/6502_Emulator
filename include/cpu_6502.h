@@ -154,7 +154,13 @@ class CPU_6502 {
         u8 BVS();   // Branch if overflow flag set
 
         // Status Flag Changes
-        u8 SEC();
+        u8 CLC();   // Clear carry flag
+        u8 CLD();   // Clear decimal mode flag
+        u8 CLI();   // Clear interrupt disable flag
+        u8 CLV();   // Clear overflow flag
+        u8 SEC();   // Set carry flag
+        u8 SED();   // Set decimal mode flag
+        u8 SEI();   // Set interrupt disable flag
 
         // Illegal Opcode
         u8 XXX();
