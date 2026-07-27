@@ -2,6 +2,7 @@
 
 #include "emulator.h"
 #include <catch2/catch_test_macros.hpp>
+#include <cstdio>
 #include <functional>
 
 // Pins down the EXACT number of cycles an instruction takes, rather than

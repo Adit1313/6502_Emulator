@@ -1,7 +1,4 @@
-#include "emulator.h"
-#include "test_helpers.h"
-#include <catch2/catch_test_macros.hpp>
-#include <cstdio>
+#include "tests.h"
 
 #pragma region BCC Tests
 
