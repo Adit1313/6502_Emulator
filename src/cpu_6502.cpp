@@ -857,6 +857,11 @@ CPU_State CPU_6502::get_CPU_state() const
     return {PC, SP, A, X, Y, flags};
 }
 
+bool CPU_6502::instruction_complete() const
+{
+    return current_cycles == 0;
+}
+
 inline void CPU_6502::update_zn_flags(u8 reg)
 {
     if (reg == 0)

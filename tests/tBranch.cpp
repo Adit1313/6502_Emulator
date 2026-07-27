@@ -1,15 +1,7 @@
 #include "emulator.h"
+#include "test_helpers.h"
 #include <catch2/catch_test_macros.hpp>
 #include <cstdio>
-
-// Each branch test loads a sentinel/flag-setting instruction, the branch
-// itself, a "fallthrough" marker (LDA #0xEE) and, where taken, a "target"
-// marker (LDA #0x11) placed at the branch destination. Checking A one tick
-// short of - and then exactly at - the tick where the next instruction's
-// effect becomes visible pins down the branch's cycle count precisely:
-// clock() executes an instruction's full effect on the first tick its
-// current_cycles reaches 0, so instruction N+1's effect appears at
-// tick = (sum of cycles of instructions 1..N) + 1.
 
 #pragma region BCC Tests
 
@@ -28,11 +20,7 @@ TEST_CASE("BCC branch behaviour", "[BCC]")
             0xA9, 0x11          // 0x206 LDA #0x11 (target)
         });
 
-        emu.execute(5);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x99);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x11);
+        require_exact_cycle_count(emu, 6, 0x11, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 
     SECTION("Not taken when carry set (2 cycles)")
@@ -44,11 +32,7 @@ TEST_CASE("BCC branch behaviour", "[BCC]")
             0xA9, 0xEE          // 0x205 LDA #0xEE (fallthrough, must execute)
         });
 
-        emu.execute(6);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x99);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0xEE);
+        require_exact_cycle_count(emu, 7, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -72,11 +56,7 @@ TEST_CASE("BCS branch behaviour", "[BCS]")
             0xA9, 0x11          // 0x207 LDA #0x11 (target)
         });
 
-        emu.execute(7);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x99);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x11);
+        require_exact_cycle_count(emu, 8, 0x11, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 
     SECTION("Not taken when carry clear (2 cycles)")
@@ -87,11 +67,7 @@ TEST_CASE("BCS branch behaviour", "[BCS]")
             0xA9, 0xEE          // 0x204 LDA #0xEE (fallthrough, must execute)
         });
 
-        emu.execute(4);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x99);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0xEE);
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -114,11 +90,7 @@ TEST_CASE("BEQ branch behaviour", "[BEQ]")
             0xA9, 0x11          // 0x206 LDA #0x11 (target)
         });
 
-        emu.execute(5);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x00);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x11);
+        require_exact_cycle_count(emu, 6, 0x11, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 
     SECTION("Not taken when zero flag clear (2 cycles)")
@@ -129,11 +101,7 @@ TEST_CASE("BEQ branch behaviour", "[BEQ]")
             0xA9, 0xEE          // 0x204 LDA #0xEE (fallthrough, must execute)
         });
 
-        emu.execute(4);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x01);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0xEE);
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -156,11 +124,7 @@ TEST_CASE("BNE branch behaviour", "[BNE]")
             0xA9, 0x11          // 0x206 LDA #0x11 (target)
         });
 
-        emu.execute(5);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x01);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x11);
+        require_exact_cycle_count(emu, 6, 0x11, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 
     SECTION("Not taken when zero flag set (2 cycles)")
@@ -171,11 +135,7 @@ TEST_CASE("BNE branch behaviour", "[BNE]")
             0xA9, 0xEE          // 0x204 LDA #0xEE (fallthrough, must execute)
         });
 
-        emu.execute(4);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x00);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0xEE);
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -198,11 +158,7 @@ TEST_CASE("BMI branch behaviour", "[BMI]")
             0xA9, 0x11          // 0x206 LDA #0x11 (target)
         });
 
-        emu.execute(5);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x80);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x11);
+        require_exact_cycle_count(emu, 6, 0x11, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 
     SECTION("Not taken when negative flag clear (2 cycles)")
@@ -213,11 +169,7 @@ TEST_CASE("BMI branch behaviour", "[BMI]")
             0xA9, 0xEE          // 0x204 LDA #0xEE (fallthrough, must execute)
         });
 
-        emu.execute(4);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x01);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0xEE);
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -240,11 +192,7 @@ TEST_CASE("BPL branch behaviour", "[BPL]")
             0xA9, 0x11          // 0x206 LDA #0x11 (target)
         });
 
-        emu.execute(5);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x01);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x11);
+        require_exact_cycle_count(emu, 6, 0x11, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 
     SECTION("Not taken when negative flag set (2 cycles)")
@@ -255,11 +203,7 @@ TEST_CASE("BPL branch behaviour", "[BPL]")
             0xA9, 0xEE          // 0x204 LDA #0xEE (fallthrough, must execute)
         });
 
-        emu.execute(4);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x80);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0xEE);
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -282,11 +226,7 @@ TEST_CASE("BVC branch behaviour", "[BVC]")
             0xA9, 0x11          // 0x206 LDA #0x11 (target)
         });
 
-        emu.execute(5);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x99);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x11);
+        require_exact_cycle_count(emu, 6, 0x11, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 
     SECTION("Not taken when overflow flag set (2 cycles)")
@@ -298,11 +238,7 @@ TEST_CASE("BVC branch behaviour", "[BVC]")
             0xA9, 0xEE          // 0x206 LDA #0xEE (fallthrough, must execute)
         });
 
-        emu.execute(6);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x80);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0xEE);
+        require_exact_cycle_count(emu, 7, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -326,11 +262,7 @@ TEST_CASE("BVS branch behaviour", "[BVS]")
             0xA9, 0x11          // 0x208 LDA #0x11 (target)
         });
 
-        emu.execute(7);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x80);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x11);
+        require_exact_cycle_count(emu, 8, 0x11, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 
     SECTION("Not taken when overflow flag clear (2 cycles)")
@@ -341,11 +273,7 @@ TEST_CASE("BVS branch behaviour", "[BVS]")
             0xA9, 0xEE          // 0x204 LDA #0xEE (fallthrough, must execute)
         });
 
-        emu.execute(4);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x99);
-
-        emu.execute(1);
-        REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0xEE);
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -368,13 +296,9 @@ TEST_CASE("Branch taken across a page boundary costs an extra cycle", "[BCC][Pag
     });
     emu.load_bytes_at_address(0x303, std::vector<u8> {0xA9, 0x11}); // LDA #0x11 (target)
 
-    // 2 (sentinel) + 4 (2 base + 1 taken + 1 page-cross) = 6; without the
-    // page-cross cycle the target would already be visible here.
-    emu.execute(6);
-    REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x99);
-
-    emu.execute(1);
-    REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x11);
+    // 2 (sentinel) + 4 (2 base + 1 taken + 1 page-cross) + 1 = 7; without the
+    // page-cross cycle the target would already be visible one tick sooner.
+    require_exact_cycle_count(emu, 7, 0x11, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
 }
 
 TEST_CASE("Branch supports negative (backward) offsets", "[BCC][Backward]")
@@ -391,12 +315,8 @@ TEST_CASE("Branch supports negative (backward) offsets", "[BCC][Backward]")
         0x90, 0xEC              // 0x212 BCC -20 -> target 0x200 (same page, no page cross)
     });
 
-    // 2 (sentinel) + 3 (2 base + 1 taken, no page cross) = 5.
-    emu.execute(5);
-    REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x99);
-
-    emu.execute(1);
-    REQUIRE(emu.get_CPU_obj().get_CPU_state().A == 0x11);
+    // 2 (sentinel) + 3 (2 base + 1 taken, no page cross) + 1 = 6.
+    require_exact_cycle_count(emu, 6, 0x11, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
 }
 
 #pragma endregion

@@ -1,4 +1,5 @@
 #include "emulator.h"
+#include "test_helpers.h"
 #include <catch2/catch_test_macros.hpp>
 #include <cstdio>
 
@@ -42,6 +43,13 @@ TEST_CASE("SEC tests", "[SEC][IMP]")
         REQUIRE(cpu.get_flag(CPU_6502::V) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::D) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::I) == 0);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), SEC (tested, 2), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x38, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -88,6 +96,13 @@ TEST_CASE("CLC tests", "[CLC][IMP]")
         REQUIRE(cpu.get_flag(CPU_6502::D) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::I) == 0);
     }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), CLC (tested, 2), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x18, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
 }
 
 #pragma endregion
@@ -132,6 +147,13 @@ TEST_CASE("SED tests", "[SED][IMP]")
         REQUIRE(cpu.get_flag(CPU_6502::N) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::V) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::I) == 0);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), SED (tested, 2), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0xF8, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -178,6 +200,13 @@ TEST_CASE("CLD tests", "[CLD][IMP]")
         REQUIRE(cpu.get_flag(CPU_6502::V) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::I) == 0);
     }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), CLD (tested, 2), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0xD8, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
 }
 
 #pragma endregion
@@ -223,6 +252,13 @@ TEST_CASE("SEI tests", "[SEI][IMP]")
         REQUIRE(cpu.get_flag(CPU_6502::V) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::D) == 0);
     }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), SEI (tested, 2), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x78, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
 }
 
 #pragma endregion
@@ -267,6 +303,13 @@ TEST_CASE("CLI tests", "[CLI][IMP]")
         REQUIRE(cpu.get_flag(CPU_6502::N) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::V) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::D) == 0);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), CLI (tested, 2), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x58, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -321,6 +364,13 @@ TEST_CASE("CLV tests", "[CLV][IMP]")
         REQUIRE(cpu.get_flag(CPU_6502::Z) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::D) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::I) == 0);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), CLV (tested, 2), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0xB8, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 

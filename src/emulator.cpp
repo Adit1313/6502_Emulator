@@ -18,12 +18,26 @@ void Emulator::step()
     elapsed_cycles += 1;
 }
 
-void Emulator::execute(u32 steps)
+void Emulator::execute(u32 count, EXECUTION_MODE mode)
 {
-    while (steps > 0)
+    if (mode == CYCLES)
     {
-        step();
-        steps--;
+        while (count > 0)
+        {
+            step();
+            count--;
+        }
+    }
+    else // INSTRUCTIONS
+    {
+        while (count > 0)
+        {
+            do
+            {
+                step();
+            } while (!emu_cpu.instruction_complete());
+            count--;
+        }
     }
 }
 

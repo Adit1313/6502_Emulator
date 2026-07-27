@@ -10,7 +10,7 @@ Bus::~Bus()
 
 }
 
-u8 Bus::read(u16 address)
+u8 Bus::read(u16 address) const
 {
     return ram[address];
 }

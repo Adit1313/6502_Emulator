@@ -66,6 +66,7 @@ class CPU_6502 {
         void set_flag(FLAGS f, bool value);
         bool get_flag(FLAGS f);
         CPU_State get_CPU_state() const;
+        bool instruction_complete() const; // true if the previous clock() finished draining an instruction's cycles
         
     private:
         // Registers

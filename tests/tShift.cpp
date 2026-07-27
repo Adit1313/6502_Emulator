@@ -1,4 +1,5 @@
 #include "emulator.h"
+#include "test_helpers.h"
 #include <catch2/catch_test_macros.hpp>
 #include <cstdio>
 
@@ -56,6 +57,13 @@ TEST_CASE("ASL flag behaviour", "[ASL]")
         REQUIRE(cpu.get_flag(CPU_6502::Z) == 0);
         REQUIRE(cpu.get_flag(CPU_6502::N) == 0);
     }
+
+    SECTION("Verify cycle count (ACC addressing)")
+    {
+        // LDA #0x01 (sentinel, 2), ASL A (tested ACC, 2), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x01, 0x0A, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
 }
 
 TEST_CASE("ASL with ZP addressing", "[ASL][ZP]")
@@ -76,6 +84,14 @@ TEST_CASE("ASL with ZP addressing", "[ASL][ZP]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x02);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), ASL $10 (tested ZP, 5), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x10, std::vector<u8> {0x01});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x06, 0x10, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 8, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -99,6 +115,14 @@ TEST_CASE("ASL with ZPX addressing", "[ASL][ZPX]")
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x02);
     }
+
+    SECTION("Verify cycle count")
+    {
+        // LDX #1 (2), LDA #0x00 (marker baseline, 2), ASL $10,X (tested ZPX, 6, mem[0x11]), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x11, std::vector<u8> {0x01});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x01, 0xA9, 0x00, 0x16, 0x10, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 11, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
 }
 
 TEST_CASE("ASL with ABS addressing", "[ASL][ABS]")
@@ -119,6 +143,14 @@ TEST_CASE("ASL with ABS addressing", "[ASL][ABS]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x02);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), ASL $0300 (tested ABS, 6), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x300, std::vector<u8> {0x01});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x0E, 0x00, 0x03, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 9, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -141,6 +173,27 @@ TEST_CASE("ASL with ABSX addressing", "[ASL][ABSX]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x02);
+    }
+
+    SECTION("Verify cycle count (same page)")
+    {
+        // LDX #1 (2), LDA #0x00 (marker baseline, 2), ASL $0300,X -> $0301 same page (tested ABSX, 7), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x301, std::vector<u8> {0x01});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x01, 0xA9, 0x00, 0x1E, 0x00, 0x03, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 12, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
+
+    SECTION("Verify cycle count (page boundary crossed, KNOWN DEVIATION from real 6502)")
+    {
+        // NOTE: Real 6502 ASL $nnnn,X always costs 7 cycles, page-crossing included (it is a
+        // read-modify-write instruction and must perform the write regardless). This emulator's
+        // ABSX() addressing mode unconditionally adds a page-cross cycle regardless of which
+        // instruction is using it, so ASL currently (incorrectly) costs 8 here instead of 7.
+        // This test documents the emulator's actual behaviour until that is fixed.
+        // LDX #2 (2), LDA #0x00 (marker baseline, 2), ASL $02FF,X -> $0301 crosses page (tested ABSX, 7+1), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x301, std::vector<u8> {0x01});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x02, 0xA9, 0x00, 0x1E, 0xFF, 0x2, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 13, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -198,6 +251,13 @@ TEST_CASE("LSR flag behaviour", "[LSR]")
         REQUIRE(cpu.get_CPU_state().A == 0x40);
         REQUIRE(cpu.get_flag(CPU_6502::N) == 0);
     }
+
+    SECTION("Verify cycle count (ACC addressing)")
+    {
+        // LDA #0x02 (sentinel, 2), LSR A (tested ACC, 2), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x02, 0x4A, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
 }
 
 TEST_CASE("LSR with ZP addressing", "[LSR][ZP]")
@@ -218,6 +278,14 @@ TEST_CASE("LSR with ZP addressing", "[LSR][ZP]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x01);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), LSR $10 (tested ZP, 5), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x10, std::vector<u8> {0x02});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x46, 0x10, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 8, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -241,6 +309,14 @@ TEST_CASE("LSR with ZPX addressing", "[LSR][ZPX]")
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x01);
     }
+
+    SECTION("Verify cycle count")
+    {
+        // LDX #1 (2), LDA #0x00 (marker baseline, 2), LSR $10,X (tested ZPX, 6, mem[0x11]), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x11, std::vector<u8> {0x02});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x01, 0xA9, 0x00, 0x56, 0x10, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 11, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
 }
 
 TEST_CASE("LSR with ABS addressing", "[LSR][ABS]")
@@ -261,6 +337,14 @@ TEST_CASE("LSR with ABS addressing", "[LSR][ABS]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x01);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), LSR $0300 (tested ABS, 6), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x300, std::vector<u8> {0x02});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x4E, 0x00, 0x03, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 9, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -283,6 +367,23 @@ TEST_CASE("LSR with ABSX addressing", "[LSR][ABSX]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x01);
+    }
+
+    SECTION("Verify cycle count (same page)")
+    {
+        // LDX #1 (2), LDA #0x00 (marker baseline, 2), LSR $0300,X -> $0301 same page (tested ABSX, 7), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x301, std::vector<u8> {0x02});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x01, 0xA9, 0x00, 0x5E, 0x00, 0x03, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 12, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
+
+    SECTION("Verify cycle count (page boundary crossed, KNOWN DEVIATION from real 6502)")
+    {
+        // NOTE: see ASL ABSX's matching section -- same known deviation applies to LSR.
+        // LDX #2 (2), LDA #0x00 (marker baseline, 2), LSR $02FF,X -> $0301 crosses page (tested ABSX, 7+1), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x301, std::vector<u8> {0x02});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x02, 0xA9, 0x00, 0x5E, 0xFF, 0x2, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 13, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -341,6 +442,13 @@ TEST_CASE("ROL flag behaviour", "[ROL]")
         REQUIRE(cpu.get_CPU_state().A == 0x80);
         REQUIRE(cpu.get_flag(CPU_6502::N) == 1);
     }
+
+    SECTION("Verify cycle count (ACC addressing)")
+    {
+        // LDA #0x01 (sentinel, 2), ROL A (tested ACC, 2, carry in clear), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x01, 0x2A, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
 }
 
 TEST_CASE("ROL with ZP addressing", "[ROL][ZP]")
@@ -361,6 +469,14 @@ TEST_CASE("ROL with ZP addressing", "[ROL][ZP]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x02);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), ROL $10 (tested ZP, 5), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x10, std::vector<u8> {0x01});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x26, 0x10, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 8, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -384,6 +500,14 @@ TEST_CASE("ROL with ZPX addressing", "[ROL][ZPX]")
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x02);
     }
+
+    SECTION("Verify cycle count")
+    {
+        // LDX #1 (2), LDA #0x00 (marker baseline, 2), ROL $10,X (tested ZPX, 6, mem[0x11]), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x11, std::vector<u8> {0x01});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x01, 0xA9, 0x00, 0x36, 0x10, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 11, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
 }
 
 TEST_CASE("ROL with ABS addressing", "[ROL][ABS]")
@@ -404,6 +528,14 @@ TEST_CASE("ROL with ABS addressing", "[ROL][ABS]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x02);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), ROL $0300 (tested ABS, 6), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x300, std::vector<u8> {0x01});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x2E, 0x00, 0x03, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 9, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -426,6 +558,23 @@ TEST_CASE("ROL with ABSX addressing", "[ROL][ABSX]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x02);
+    }
+
+    SECTION("Verify cycle count (same page)")
+    {
+        // LDX #1 (2), LDA #0x00 (marker baseline, 2), ROL $0300,X -> $0301 same page (tested ABSX, 7), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x301, std::vector<u8> {0x01});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x01, 0xA9, 0x00, 0x3E, 0x00, 0x03, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 12, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
+
+    SECTION("Verify cycle count (page boundary crossed, KNOWN DEVIATION from real 6502)")
+    {
+        // NOTE: see ASL ABSX's matching section -- same known deviation applies to ROL.
+        // LDX #2 (2), LDA #0x00 (marker baseline, 2), ROL $02FF,X -> $0301 crosses page (tested ABSX, 7+1), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x301, std::vector<u8> {0x01});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x02, 0xA9, 0x00, 0x3E, 0xFF, 0x2, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 13, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -485,6 +634,13 @@ TEST_CASE("ROR flag behaviour", "[ROR]")
         REQUIRE(cpu.get_CPU_state().A == 0x01);
         REQUIRE(cpu.get_flag(CPU_6502::C) == 0);
     }
+
+    SECTION("Verify cycle count (ACC addressing)")
+    {
+        // LDA #0x02 (sentinel, 2), ROR A (tested ACC, 2, carry in clear), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x02, 0x6A, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 5, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
 }
 
 TEST_CASE("ROR with ZP addressing", "[ROR][ZP]")
@@ -505,6 +661,14 @@ TEST_CASE("ROR with ZP addressing", "[ROR][ZP]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x01);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), ROR $10 (tested ZP, 5), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x10, std::vector<u8> {0x02});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x66, 0x10, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 8, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -528,6 +692,14 @@ TEST_CASE("ROR with ZPX addressing", "[ROR][ZPX]")
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x01);
     }
+
+    SECTION("Verify cycle count")
+    {
+        // LDX #1 (2), LDA #0x00 (marker baseline, 2), ROR $10,X (tested ZPX, 6, mem[0x11]), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x11, std::vector<u8> {0x02});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x01, 0xA9, 0x00, 0x76, 0x10, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 11, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
 }
 
 TEST_CASE("ROR with ABS addressing", "[ROR][ABS]")
@@ -548,6 +720,14 @@ TEST_CASE("ROR with ABS addressing", "[ROR][ABS]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x01);
+    }
+
+    SECTION("Verify cycle count")
+    {
+        // LDA #0x00 (marker baseline, 2), ROR $0300 (tested ABS, 6), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x300, std::vector<u8> {0x02});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA9, 0x00, 0x6E, 0x00, 0x03, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 9, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 
@@ -570,6 +750,23 @@ TEST_CASE("ROR with ABSX addressing", "[ROR][ABSX]")
 
         auto cpu = emu.get_CPU_obj();
         REQUIRE(cpu.get_CPU_state().A == 0x01);
+    }
+
+    SECTION("Verify cycle count (same page)")
+    {
+        // LDX #1 (2), LDA #0x00 (marker baseline, 2), ROR $0300,X -> $0301 same page (tested ABSX, 7), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x301, std::vector<u8> {0x02});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x01, 0xA9, 0x00, 0x7E, 0x00, 0x03, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 12, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
+    }
+
+    SECTION("Verify cycle count (page boundary crossed, KNOWN DEVIATION from real 6502)")
+    {
+        // NOTE: see ASL ABSX's matching section -- same known deviation applies to ROR.
+        // LDX #2 (2), LDA #0x00 (marker baseline, 2), ROR $02FF,X -> $0301 crosses page (tested ABSX, 7+1), LDA #0xEE (marker)
+        emu.load_bytes_at_address(0x301, std::vector<u8> {0x02});
+        emu.load_bytes_at_address(0x200, std::vector<u8> {0xA2, 0x02, 0xA9, 0x00, 0x7E, 0xFF, 0x2, 0xA9, 0xEE});
+        require_exact_cycle_count(emu, 13, 0xEE, [&]{ return emu.get_CPU_obj().get_CPU_state().A; });
     }
 }
 

@@ -24,10 +24,15 @@ class Emulator
             RST_BUS = 2
         };
 
+        enum EXECUTION_MODE {
+            CYCLES = 0,
+            INSTRUCTIONS = 1
+        };
+
         // Functions
         void load_bytes_at_address(u16 address, const std::vector<u8>& data_sequence);
         void step(); // Executes a single step of the emulator
-        void execute(u32 steps); // Executes n steps of the emulator
+        void execute(u32 count, EXECUTION_MODE mode = CYCLES); // Executes n cycles (default) or n full instructions
         void reset(RESET_FLAG f);
 
         // Helper Functions
